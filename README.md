@@ -1,1 +1,1 @@
-# Gould-Street-University-Portal---SLAP
+# Gould-Street-University-Portal-SLAP
