@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLAP Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Login */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .top-banner {
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 110px; /* Set a fixed height to avoid dropdown expansion */
+        }
+
+        .logo-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-button {
+            font-size: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .logo-small {
+            font-size: 60px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow:1;
+            margin-top:50px;
+        }
+
+        /* Styles for dropdown */
+        .dropdown {
+            position: absolute; /* Position it absolute */
+            right: 20px; /* Align to the right */
+            padding-right: 10%;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 50%;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+        }
+
+        .logo {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .letter {
+            transition: transform 1s ease;
+        }
+
+        /* Constant glow and rotate effect for the letter S */
+        .rotate-glow {
+            animation: rotateEffect 1s ease-in-out forwards;
+            color: #007bff;
+            text-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+        }
+
+        @keyframes rotateEffect {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .main-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1600px;
+            width: 100%;
+            text-align:center;
+            margin-top:20px;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 2.8rem;
+            color: #333;
+        }
+
+        /* Button Group */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .dash-button {
+            width: 240px;
+            height: 100px;
+            background-color: #e6e8f1;
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        
+        .dash-button:hover {
+            background-color: #007bff; /* Darker green when hovered */
+            color:#fff;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="top-banner">
+        <div class="logo-container">
+            <button class="logo-button" id="logoButton">
+                <div class="logo-small">
+                    <span class="letter">G</span>
+                    <span class="letter" id="s-letter">S</span>
+                    <span class="letter">U</span>
+                </div>
+            </button>
+        </div>
+
+        <!-- Dropdown for Account button, aligned to the right -->
+        <div class="dropdown">
+            <button class="logout-button" onclick="toggleDropdown()">Account <span style="font-size: 0.8em;">&#9660;</span></button>
+            <div class="dropdown-content" id="dropdownContent" style="display: none;">
+                <a href="#" onclick="window.location.href='task5.html'">Change Password</a>
+                <a href="#" onclick="window.location.href='task2.html'">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <h1>Welcome, Admin</h1>
+    <div class="main-container">
+        <button class="dash-button" id="registerButton">Create New User</button>
+        <button class="dash-button" id="slapButton">Create SLAP</button>
+        <button class="dash-button" id="resetPassButton">Reset a User's Password</button>
+        <button class="dash-button" id="createCourseButton">Create Course</button>
+        <button class="dash-button" id="reorganizeContactsButton">Contact List</button>
+    </div>
+
+    <script>
+        // Add a 3-second delay before triggering the glow and rotate effect for the letter 'S'
+        window.onload = function() {
+            const sLetter = document.getElementById('s-letter');
+
+            setTimeout(() => {
+                sLetter.classList.add('rotate-glow');
+            }, 3000); // 3-second delay before the animation starts
+        }
+
+        // Function to toggle the dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById("dropdownContent");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close the dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.logout-button')) {
+                const dropdown = document.getElementById("dropdownContent");
+                if (dropdown && dropdown.style.display === "block") {
+                    dropdown.style.display = "none";
+                }
+            }
+        }
+
+        document.getElementById('registerButton').addEventListener('click', function() {
+            window.location.href = 'task21.html';
+        });
+        document.getElementById('slapButton').addEventListener('click', function() {
+            window.location.href = 'task22.html';
+        });
+        document.getElementById('resetPassButton').addEventListener('click', function() {
+            window.location.href = 'task24.html';
+        });
+        document.getElementById('createCourseButton').addEventListener('click', function() {
+            window.location.href = 'task23.html';
+        });
+        document.getElementById('reorganizeContactsButton').addEventListener('click', function() {
+            window.location.href = 'task25.html';
+        });
+        document.getElementById('logoButton').addEventListener('click', function() {
+            const userType = localStorage.getItem('userType'); 
+            console.log(userType);
+            switch (userType) {
+                case "student":
+                    window.location.href = "student_dashboard.html"
+                    break;
+                case "instructor":
+                    window.location.href = "instructor_dashboard.html"
+                    break;
+                case "admin":
+                    window.location.href = "admin_dashboard.html"
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLAP-View Student Activity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+     * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: "Poppins", sans-serif;
+      }
+
+      body {
+         background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+         padding-top: 70px; 
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         height: 100vh;
+       } 
+
+      .navbar {
+         position: fixed;
+         top: 0;
+         width: 100%;
+         justify-content: space-between;
+         align-items: center;
+         z-index: 1000;
+         background-color: #1f3c88;
+         padding: 10px 20px;
+         display: flex;
+        }
+
+      .navbar-title {
+         color: white;
+         font-weight: bold;
+         margin-left: auto;
+         font-size: 1.2rem;
+        }
+
+      .navbar-links {
+         display: flex;
+       }
+
+      .navbar a {
+         color: white;
+         text-decoration: none;
+         margin: 0 15px;
+         border-radius: 5px;
+         font-weight: 700;
+         transition: background-color 0.3s;
+         padding: 10px 15px;
+        }
+
+      .navbar a:hover {
+         background-color: rgba(255, 255, 255, 0.2);
+        }
+    
+       .logo-text {
+         text-align: center;
+         margin-bottom: 2rem;
+        }
+
+      h1 {
+         font-size: 3rem;
+         color: #1f3c88;
+         font-weight: 900;
+        }
+
+      p {
+         font-size: 1.5rem;
+         letter-spacing: 1px;
+         color: #333;
+       }
+       
+      .main-form-container {
+         background-color: white;
+         padding: 20px;
+         border-radius: 10px;
+         width: 80%;
+         max-width: 600px;
+         box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+       }
+
+      h2 {
+         color: #1f3c88;
+         margin-bottom: 1rem;
+         text-align: center;
+         font-weight: 900;
+       }
+
+      label {
+         font-size: 1.2rem;
+         color: #1f3c88;
+         margin-bottom: 10px;
+         display: block;
+         font-weight: 700;
+       }
+
+      select {
+         width: 100%;
+         padding: 10px;
+         border: 1px solid #ccc;
+         font-size: 1rem;
+         margin-bottom: 1.5rem;
+         border-radius: 5px;
+        }
+
+      .list-of-groups {
+         overflow-y: scroll;
+         display: flex; 
+         justify-content: center;
+         margin-top: 1rem;
+         max-height: 200px;
+        }
+
+      .group-table {
+        border-collapse: collapse; 
+        table-layout: fixed; 
+        width: 100%;
+      }
+
+      .group-item {
+        border: 1px solid #ccc;
+        border-collapse: collapse; 
+        table-layout: fixed; 
+        margin-bottom: 10px;
+        padding: 10px;
+      }
+
+      .toggle-details {
+        cursor: pointer;
+        color: #1f3c88;
+        text-decoration: underline;
+      }
+
+      .group-details {
+         border: 1px solid #1f3c88;
+         border-radius: 5px;
+         display: none;
+         margin-top: 5px;
+         padding: 10px;
+         background-color: #e0f7fa;
+        }
+
+      .group-table th,
+      .group-table td {
+         padding: 8px; 
+         border: 1px solid #ccc;
+         text-align: left;
+        }
+
+      .group-table th:nth-child(2), 
+       .group-table td:nth-child(2) {
+         text-align: center;
+       }
+
+      .group-table th:nth-child(3),
+      .group-table td:nth-child(3) {
+          text-align: left; 
+       }
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            text-align: left;
+        }
+        .activity-table th, .activity-table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .activity-table th {
+            background-color: #f1f5f9;
+            color: #1f3c88;
+        }
+        .activity-row {
+            background-color: #ffffff;
+            transition: background-color 0.3s;
+        }
+        .activity-row:hover {
+            background-color: #e0e7ff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <div class="navbar-links">
+            <a href="/home">Home</a>
+            <a href="/task15">Create Project Groups</a>
+            <a href="/task16">View Project Groups</a>
+            <a href="/task17">Upload Project Document</a>
+            <a href="/task19">View Student Activity</a>
+        </div>
+        <div class="navbar-title">Instructor: Your Name</div>
+    </div>
+
+    <!-- Logo and header section -->
+    <div class="logo-text">
+        <h1>GSU</h1>
+        <p>Gould Street University</p>
+    </div>
+
+    <!-- Main content container -->
+    <div class="main-form-container">
+        <h2>View Student Activity</h2>
+
+        <!-- Dropdown for class selection -->
+        <label for="classSelect">Select Class:</label>
+        <select id="classSelect" required>
+            <option value="">-- Select a Class --</option>
+            <option value="thermodynamics">Thermodynamics</option>
+            <option value="engmechanics">Engineering Mechanics</option>
+            <option value="mechvibrations">Mechanical Vibrations</option>
+            <option value="fluiddynamics">Fluid Dynamics</option>
+        </select>
+
+        <!-- Dropdown for group selection -->
+        <label for="groupSelect">Select Group:</label>
+        <select id="groupSelect" required>
+            <option value="">-- Select a Group --</option>
+        </select>
+
+        <!-- Activity table container -->
+        <div id="activityContainer">
+            <table class="activity-table" id="activityTable">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Last Login</th>
+                        <th>Submission Count</th>
+                    </tr>
+                </thead>
+                <tbody id="activityTableBody">
+                    <!-- Dynamic rows will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const classSelect = document.getElementById("classSelect");
+        const groupSelect = document.getElementById("groupSelect");
+        const activityTableBody = document.getElementById("activityTableBody");
+
+        // Populate groups based on the selected class using API call
+        async function populateGroups() {
+            groupSelect.innerHTML = '<option value="">-- Select a Group --</option>';
+            const selectedClass = classSelect.value;
+
+            try {
+                const response = await fetch(`/api/class-groups?className=${selectedClass}`);
+                if (!response.ok) throw new Error("Failed to fetch groups for the selected class.");
+                
+                const groups = await response.json();
+                groups.forEach(group => {
+                    const option = document.createElement("option");
+                    option.value = group.groupName;
+                    option.textContent = group.groupName;
+                    groupSelect.appendChild(option);
+                });
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+
+        // Fetch and display activity data for the selected group using API call
+        async function displayActivityData() {
+            const selectedGroup = groupSelect.value;
+            activityTableBody.innerHTML = ""; // Clear previous data
+
+            try {
+                const response = await fetch(`/api/group-activity?groupName=${selectedGroup}`);
+                if (!response.ok) throw new Error("Failed to fetch activity data for the selected group.");
+
+                const activities = await response.json();
+                activities.forEach(activity => {
+                    const row = document.createElement("tr");
+                    row.classList.add("activity-row");
+                    row.innerHTML = `
+                        <td>${activity.name}</td>
+                        <td>${activity.lastLogin}</td>
+                        <td>${activity.submissions}</td>
+                    `;
+                    activityTableBody.appendChild(row);
+                });
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        // Event listeners for class and group selection
+        classSelect.addEventListener("change", populateGroups);
+        groupSelect.addEventListener("change", displayActivityData);
+
+    </script>
+</body>
+</html>

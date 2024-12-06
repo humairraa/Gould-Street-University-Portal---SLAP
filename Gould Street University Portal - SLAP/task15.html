@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group Creation Interface - GSU</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+      padding-top: 70px;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      background-color: #1f3c88;
+      padding: 10px 20px;
+      display: flex;
+    }
+
+    .navbar-title {
+      color: white;
+      font-weight: bold;
+      margin-left: auto;
+      font-size: 1.2rem;
+    }
+
+    .navbar-links {
+      display: flex;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      border-radius: 5px;
+      font-weight: 700;
+      transition: background-color 0.3s;
+      padding: 10px 15px;
+    }
+
+    .navbar a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .logo-text {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 3rem;
+      letter-spacing: 5px;
+      color: #1f3c88;
+      font-weight: 900;
+    }
+
+    p {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: #333;
+    }
+
+    .main-form-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #1f3c88;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    label {
+      font-size: 1.2rem;
+      color: #1f3c88;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    select, input[type="text"], button {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .checkbox-container {
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!--Code pertaining to the navigation bar and links to the navigation bar-->
+  <div class="navbar">
+    <div class="navbar-links">
+      <a href="/home">Home</a>
+        <a href="/task6">Submit An Assignment</a>
+        <a href="/task15">Create Project Groups</a>
+        <a href="/task16">View Project Groups</a>
+        <a href="/task17">Upload a Project Instruction Document</a>
+        <a href="/task18">Submit Group Evaluations</a>
+    </div>
+    <div class="navbar-title">Instructor: Your Name</div>
+  </div>
+
+  <!--Code that focuses on the logo and header of the page itself-->
+  <div class="logo-text">
+    <h1>GSU</h1>
+    <p>Gould Street University</p>
+  </div>
+
+    <!-- Creating the container for which the form is in (with a header too)-->
+    <div class="main-form-container">
+    <h2>Group Creation Interface</h2>
+
+    <!--Starting to look at dropdown selection menus---->
+    <form id="groupCreationSelectOptions">
+      <label for="classSelect">Select Class:</label>
+      <select id="classSelect" name="classSelect" required>
+        <option value="">-- Select a Class --</option>
+        <option value="thermodynamics">Thermodynamics</option>
+        <option value="engmechanics">Engineering Mechanics</option>
+        <option value="mechvibrations">Mechanical Vibrations</option>
+        <option value="fluiddynamics">Fluid Dynamics</option>
+      </select>
+
+      <!--Select a project to put a group into (creates a container to be dynamically populated)-->
+      <label for="projectSelect">Select Project:</label>
+      <select id="projectSelect" name="projectSelect" required>
+        <option value="">-- Select a Project --</option>
+      </select>
+
+      <!--Textbox to input the group name-->
+      <label for="groupName">Group Name:</label>
+      <input type="text" id="groupName" name="groupName" placeholder="Enter group name" required>
+
+      <!--This just creates checkboxes for each student that is dynamically populated depending on the class selected -->
+      <label for="studentsSelect">Select Students:</label>
+      <div class="checkbox-container" id="studentsSelect"></div>
+
+      <!--This is the submit button that submits the form to create a group-->
+      <button type="submit">Create Group</button>
+    </form>
+  </div>
+
+  <script>
+
+    // This is a mapping of key-value pairs of the class name to a string array of project names
+    const classToProjectMapping = {
+      'thermodynamics': ['Entropy Theory Project', 'Enthalpy Analysis Project', 'Heat Sink Design Project', 'Term Project'],
+      'engmechanics': ['Kinematics Simulation Project', 'Truss Bridge Design Project', 'Cantilever Analysis Project', 'Term Project'],
+      'mechvibrations': ['Damper Modelling Project', 'Forced Vibration Project', 'Free Vibrations Simulator', 'Isolation Model Simulator'],
+      'fluiddynamics': ['Turbulent Tap Project', 'Laminar Flow Project', 'Flow Gate Project', 'Term Project']
+    };
+
+    // Referencing the dropdowns for the selected class, project and students and assigning it to constants
+    const classSelection = document.getElementById('classSelect');
+    const projectSelection = document.getElementById('projectSelect');
+    const listOfStudents = document.getElementById('studentsSelect');
+
+    // This is a function that takes in the class selected by the user
+    // This is used to dynamically populate a container with projects tailored to the class selected
+    function dynamicListOfProjects(selectedCourse) {
+      projectSelection.innerHTML = '<option value="">-- Select a Project --</option>';
+      const listOfProjects = classToProjectMapping[selectedCourse] || [];
+      listOfProjects.forEach(project => {
+        const projectOption = document.createElement('option');
+        projectOption.value = project;
+        projectOption.textContent = project;
+        projectSelection.appendChild(projectOption);
+      });
+      listOfStudents.innerHTML = '';
+    }
+
+    // This is a function that makes an API call from the server.js file to retrieve students for a selected class
+    // It takes the selectedCourse variable (which has the class that was selected) and passes it as a parameter to the API
+    // The API response data retrieved is processed to have a list of students with checkboxes between them
+    async function studentsInACourse(selectedCourse) {
+      const response = await fetch(`/studentsRetrieval?course=${selectedCourse}`);
+      if (response.ok) {
+        const studentsArray = await response.json();
+        listOfStudents.innerHTML = ''; 
+        studentsArray.forEach(student => {
+          const checkboxForStudent = document.createElement('div');
+          checkboxForStudent.classList.add('checkbox-item');
+          
+          const checkboxListItem = document.createElement('input');
+          checkboxListItem.type = 'checkbox';
+          checkboxListItem.value = `${student["First Name"]} ${student["Last Name"]}`; 
+          checkboxListItem.id = student.Unique_Student_ID; 
+          
+          const label = document.createElement('label');
+          label.htmlFor = checkboxListItem.id; 
+          label.textContent = `${student["First Name"]} ${student["Last Name"]}`; 
+          
+          checkboxForStudent.appendChild(checkboxListItem);
+          checkboxForStudent.appendChild(label);
+          listOfStudents.appendChild(checkboxForStudent);
+        });
+      } else {
+        alert('Unfortunately, we could not get the list of students.');
+      }
+    }
+
+    // This function activates when the submit button is clicked
+    // THe students whose checkboxes are ticked are gathered and the data entered in the forms is sent to an API route
+    // Depending on what the API returns, there is a success or failure alert, after which the form resets
+    document.getElementById('groupCreationSelectOptions').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const checkboxes = listOfStudents.querySelectorAll('input[type="checkbox"]:checked');
+      const selectedStudents = Array.from(checkboxes).map(checkboxListItem => checkboxListItem.value);
+      const courseSelected = classSelection.value;
+      const projectSelected = projectSelection.value;
+      const decidedGroupName = document.getElementById('groupName').value;
+
+      const response = await fetch('/create-group', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ courseSelected, projectSelected, decidedGroupName, students: selectedStudents }),
+      });
+
+      if (response.ok) {
+        alert('You have successfully created a group!');
+      } else {
+        alert('Unfortunately, group formation has failed.');
+      }
+
+      document.getElementById('groupCreationSelectOptions').reset();
+      projectSelection.innerHTML = '<option value="">-- Select a Project --</option>';
+      listOfStudents.innerHTML = '';
+    });
+
+    // Adding an event listener in case the user selects a different class
+    classSelection.addEventListener('change', async function() {
+      const courseSelected = classSelection.value;
+      dynamicListOfProjects(courseSelected);
+      if (courseSelected) {
+        await studentsInACourse(courseSelected);
+      }
+    });
+
+    // Adding another event listener in case the user selects a different project
+    projectSelection.addEventListener('change', function() {
+      const selectedProject = projectSelection.value;
+      if (selectedProject) {
+        studentsInACourse(classSelection.value); 
+      }
+    });
+  </script>
+
+</body>
+</html>

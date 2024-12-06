@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Groups - GSU</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+        padding-top: 70px; 
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        background-color: #1f3c88;
+        padding: 10px 20px;
+        display: flex;
+      }
+
+      .navbar-title {
+        color: white;
+        font-weight: bold;
+        margin-left: auto;
+        font-size: 1.2rem;
+      }
+
+      .navbar-links {
+        display: flex;
+      }
+
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px;
+        border-radius: 5px;
+        font-weight: 700;
+        transition: background-color 0.3s;
+        padding: 10px 15px;
+      }
+
+      .navbar a:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .logo-text {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      h1 {
+        font-size: 3rem;
+        color: #1f3c88;
+        font-weight: 900;
+      }
+
+      p {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+        color: #333;
+      }
+
+      .main-form-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: #1f3c88;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-weight: 900;
+      }
+
+      label {
+        font-size: 1.2rem;
+        color: #1f3c88;
+        margin-bottom: 10px;
+        display: block;
+        font-weight: 700;
+      }
+
+      select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 5px;
+      }
+
+      .list-of-groups {
+        overflow-y: scroll;
+        display: flex; 
+        justify-content: center;
+        margin-top: 1rem;
+        max-height: 200px;
+      }
+
+      .group-table {
+        border-collapse: collapse; 
+        table-layout: fixed; 
+        width: 100%;
+      }
+
+      .group-item {
+        border: 1px solid #ccc;
+        border-collapse: collapse; 
+        table-layout: fixed; 
+        margin-bottom: 10px;
+        padding: 10px;
+      }
+
+      .toggle-details {
+        cursor: pointer;
+        color: #1f3c88;
+        text-decoration: underline;
+      }
+
+      .group-details {
+        border: 1px solid #1f3c88;
+        border-radius: 5px;
+        display: none;
+        margin-top: 5px;
+        padding: 10px;
+        background-color: #e0f7fa;
+      }
+
+      .group-table th,
+      .group-table td {
+        padding: 8px; 
+        border: 1px solid #ccc;
+        text-align: left;
+      }
+
+      .group-table th:nth-child(2), 
+      .group-table td:nth-child(2) {
+        text-align: center;
+      }
+
+      .group-table th:nth-child(3),
+      .group-table td:nth-child(3) {
+        text-align: left; 
+      }
+    </style>
+  </head>
+  <body>
+  <!--Code pertaining to the navigation bar and links to the navigation bar-->
+  <div class="navbar">
+      <div class="navbar-links">
+        <a href="/home">Home</a>
+        <a href="/task6">Submit An Assignment</a>
+        <a href="/task15">Create Project Groups</a>
+        <a href="/task16">View Project Groups</a>
+        <a href="/task17">Upload a Project Instruction Document</a>
+        <a href="/task18">Submit Group Evaluations</a>
+      </div>
+      <div class="navbar-title">Instructor: Your Name</div>
+    </div>
+
+  <!--Code that focuses on the logo and header of the page itself-->
+  <div class="logo-text">
+      <h1>GSU</h1>
+      <p>Gould Street University</p>
+    </div>
+
+    <!-- Creating the container for which the form is in (with a header too)-->
+    <div class="main-form-container">
+      <h2>View Created Groups for Projects</h2>
+
+      <!--Selects a project for which you want to view the groups for-->
+      <label for="projectSelect">Select Project:</label>
+      <select id="projectSelect" name="projectSelect" required>
+        <option value="">-- Select a Project --</option>
+      </select>
+
+      <!--Creating a container to hold the table with the Groups when it is populated dynamically-->
+      <div class="list-of-groups" id="listOfGroups"></div>
+    </div>
+
+    <script>
+
+      // Takes the selected project from the dropdown and puts it in a constant
+      const projectSelected = document.getElementById("projectSelect");
+
+      // Takes the reference to the container that will display student groups and assigns it to a constant
+      const listOfGroups = document.getElementById("listOfGroups");
+
+      // Makes an API call (backend code is in server.js) to retrieve project data
+      // Takes the response and then extracts project names and puts it in the dropdown
+      async function getListOfProjects() {
+        const response = await fetch("/retrieve-projects");
+        if (response.ok) {
+          const projects = await response.json();
+
+          const uniqueProjects = new Set();
+          projectSelected.innerHTML =
+            '<option value="">-- Select a Project --</option>';
+
+          projects.forEach((project) => {
+            if (project.hasOwnProperty("Project_Selected")) {
+              uniqueProjects.add(project.Project_Selected);
+            }
+          });
+
+          uniqueProjects.forEach((projectName) => {
+            const option = document.createElement("option");
+            option.value = projectName;
+            option.textContent = projectName;
+            projectSelected.appendChild(option);
+          });
+        } else {
+          alert("We failed to fetch projects unfortunately.");
+        }
+      }
+
+      // This is takes in the selected project from the dropdown menu and makes an API call
+      // This sends a GET request to the API with the project name as a parameter
+      // Upon success, a table is created to display the groups, complete with a table header
+      // The table comprises of the group name and the members of the group per row
+      async function fetchGroupsForProject(projectSelected) {
+        const response = await fetch(
+          `/retrieve-project-groups?project=${projectSelected}`
+        );
+        if (response.ok) {
+          const groupData = await response.json();
+          listOfGroups.innerHTML = "";
+
+          const table = document.createElement("table");
+          table.classList.add("group-table");
+
+          const rowForTableHeaders = document.createElement("tr");
+          rowForTableHeaders.innerHTML = `
+        <th>Group Name</th>
+        <th>Students</th>
+      `;
+          table.appendChild(rowForTableHeaders);
+
+          groupData.forEach((group) => {
+            const entryFromTable = document.createElement("tr");
+            entryFromTable.innerHTML = `
+          <td>${group.GroupName}</td>
+          <td>${group.Students.map(
+            (student) => `<div class="student-name">${student}</div>`
+          ).join("")}</td>
+        `;
+
+            table.appendChild(entryFromTable);
+          });
+
+          listOfGroups.appendChild(table);
+        } else {
+          listOfGroups.innerHTML = "Failed to fetch groups.";
+        }
+      }
+
+      // This is an event listener that ensures that the groups change depending on the project selected
+      projectSelected.addEventListener("change", function () {
+        const selectedProject = projectSelected.value;
+        if (selectedProject) {
+          fetchGroupsForProject(selectedProject);
+        }
+      });
+
+      // This function activates the getListOfProjects() function when the page loads
+      // Ensures that there are projects to select from in the dropdown menu
+      getListOfProjects();
+    </script>
+  </body>
+</html>

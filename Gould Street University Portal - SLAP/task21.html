@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Login */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .top-banner {
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 110px; /* Set a fixed height to avoid dropdown expansion */
+        }
+
+        .logo-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-button {
+            font-size: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .logo-small {
+            font-size: 60px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow:1;
+            margin-top:50px;
+        }
+
+        /* Styles for dropdown */
+        .dropdown {
+            position: absolute; /* Position it absolute */
+            right: 20px; /* Align to the right */
+            padding-right: 10%;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 50%;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+        }
+
+        .logo {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .letter {
+            transition: transform 1s ease;
+        }
+
+        /* Constant glow and rotate effect for the letter S */
+        .rotate-glow {
+            animation: rotateEffect 1s ease-in-out forwards;
+            color: #007bff;
+            text-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+        }
+
+        @keyframes rotateEffect {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .main-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            position: fixed;
+            top: 200px;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.8rem;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 0.7rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        /* Button Group */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #createButton, #cancelButton {
+            width: 48%;
+            padding: 0.8rem;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #createButton:hover {
+            background-color: #0056b3;
+        }
+
+        #cancelButton {
+            background-color: #dc3545;
+        }
+
+        #cancelButton:hover {
+            background-color: #a81927;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .radio-group {
+            display: flex; /* Flexbox to align items in a row */
+            gap: 1rem;     /* Space between radio buttons */
+            margin-top: 0.5rem;
+            margin-bottom: 1.0rem;
+        }
+    
+        .radio-group div {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-group label {
+            margin-left: 0.5rem; /* Adjust as needed for spacing */
+            padding-left: 0.3rem; /* Optional padding for extra space */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="top-banner">
+        <div class="logo-container">
+            <button class="logo-button" id="logoButton">
+                <div class="logo-small">
+                    <span class="letter">G</span>
+                    <span class="letter" id="s-letter">S</span>
+                    <span class="letter">U</span>
+                </div>
+            </button>
+        </div>
+
+        <!-- Dropdown for Account button, aligned to the right -->
+        <div class="dropdown">
+            <button class="logout-button" onclick="toggleDropdown()">Account <span style="font-size: 0.8em;">&#9660;</span></button>
+            <div class="dropdown-content" id="dropdownContent" style="display: none;">
+                <a href="#" onclick="window.location.href='task5.html'">Change Password</a>
+                <a href="#" onclick="window.location.href='task2.html'">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="main-container">
+        <h1>Create SLAP Account</h1>
+        <form id="accountForm">
+            <div class="input-group">
+                <label for="slapID">SLAP ID</label>
+                <input type="text" id="slapID" name="slapID" required>
+            </div>
+            <div class="input-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div class="input-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+            <div class="input-group">
+                <label for="email">GSU Email</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <div class="error-message" id="errorMessage"></div>
+
+            <div class="radio-group">
+                <div>
+                    <input type="radio" id="student" name="accountType" value="student" required>
+                    <label for="student">Student</label>
+                </div>
+                <div>
+                    <input type="radio" id="instructor" name="accountType" value="instructor">
+                    <label for="instructor">Instructor</label>
+                </div>
+                <div>
+                    <input type="radio" id="admin" name="accountType" value="admin">
+                    <label for="admin">Admin</label>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" id="createButton">Create Account</button>
+                <button type="button" id="cancelButton">Cancel Creation</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Add a 3-second delay before triggering the glow and rotate effect for the letter 'S'
+        window.onload = function() {
+            const sLetter = document.getElementById('s-letter');
+
+            setTimeout(() => {
+                sLetter.classList.add('rotate-glow');
+            }, 3000); // 3-second delay before the animation starts
+        }
+
+        // Function to toggle the dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById("dropdownContent");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close the dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.logout-button')) {
+                const dropdown = document.getElementById("dropdownContent");
+                if (dropdown && dropdown.style.display === "block") {
+                    dropdown.style.display = "none";
+                }
+            }
+        }
+
+        document.getElementById('accountForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            const slapID = document.getElementById('slapID').value;
+            const password = document.getElementById('password').value;
+            const confirm_password = document.getElementById('confirm_password').value;
+            const accountType = document.querySelector('input[name="accountType"]:checked').value;
+
+            const credentials = JSON.parse(localStorage.getItem('slapCredentials')) || [];
+            const slapIDExists = credentials.some(user => user.username === slapID);
+
+            if (slapIDExists) {
+                document.getElementById('errorMessage').textContent = "SLAP ID already exists. Please choose a different one.";
+                return;
+            }
+
+            const pass_validation = validatePassword(password, confirm_password);
+
+            if (pass_validation)
+            {
+                credentials.push({
+                    username: slapID,
+                    password: password,
+                    account: accountType
+                });
+
+                localStorage.setItem('slapCredentials', JSON.stringify(credentials));
+
+                alert(`Account for ${slapID} created. Returning to Dashboard.`);
+                window.location.href = 'admin_dashboard.html';
+            }
+            else{
+                document.getElementById('errorMessage').textContent = "Passwords do not match.";
+                return;
+            }
+
+        });
+
+        function validatePassword(password, pass2) {
+            if (password !== pass2) {
+                return false;
+            }
+            return true;
+        }
+
+        document.getElementById('cancelButton').addEventListener('click', function() {
+            window.location.href = 'admin_dashboard.html';
+        });
+
+        document.getElementById('logoButton').addEventListener('click', function() {
+            const userType = localStorage.getItem('userType'); 
+            console.log(userType);
+            switch (userType) {
+                case "student":
+                    window.location.href = "student_dashboard.html"
+                    break;
+                case "instructor":
+                    window.location.href = "instructor_dashboard.html"
+                    break;
+                case "admin":
+                    window.location.href = "admin_dashboard.html"
+                    break;
+            }
+        });
+
+    </script>
+</body>
+</html>

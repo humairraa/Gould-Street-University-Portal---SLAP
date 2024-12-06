@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            width: 90%;
+        }
+
+        h1 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .course-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .course-item {
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            max-height: 400px;
+        }
+
+        .course-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .course-info {
+            padding: 20px;
+        }
+
+        .course-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            text-decoration: none;
+        }
+
+        .course-code {
+            font-size: 1rem;
+            color: #555;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Welcome message and action buttons (View Slaps and Logout) -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <span id="welcomeMessage" style="font-size: 1.2rem; color: #333;"></span>
+            <div>
+                <button onclick="window.location.href = 'slaps_view.html';" style="padding: 10px 20px; font-size: 1rem; border: none; background-color: #E1E8FF; color: rgb(2, 2, 2); border-radius: 5px; cursor: pointer;">
+                    View Slaps
+                </button>
+                <!-- Logout Button -->
+                <button onclick="logout()" style="padding: 10px 20px; font-size: 1rem; border: none; background-color: #ff5e5e; color: #fff; border-radius: 5px; cursor: pointer;">
+                    Logout
+                </button>
+            </div>
+        </div>
+        
+        <h1>Your Enrolled Courses</h1>
+        
+        <div id="courseList" class="course-list">
+            <!-- List of courses with images will be displayed here -->
+        </div>
+
+        <script>
+            function displayWelcomeMessage() {
+                const currentUser = localStorage.getItem('currentUser');
+                const welcomeMessage = document.getElementById("welcomeMessage");
+                welcomeMessage.textContent = `Welcome, ${currentUser || 'Guest'}!`;
+            }
+
+            function viewCourses() {
+                displayWelcomeMessage();
+                const currentUser = localStorage.getItem('currentUser');
+                const studentCourses = JSON.parse(localStorage.getItem('studentCourseRegistration')) || [];
+                const courses = JSON.parse(localStorage.getItem('courses')) || [];
+        
+                const enrolledCourses = studentCourses
+                    .filter(reg => reg.studentID === currentUser)
+                    .map(reg => reg.courseID);
+        
+                const courseList = document.getElementById("courseList");
+                courseList.innerHTML = "";
+        
+                courses.forEach(course => {
+                    if (enrolledCourses.includes(course.courseID)) {
+                        const courseItem = document.createElement("div");
+                        courseItem.classList.add("course-item");
+                        courseItem.onclick = () => {
+                            localStorage.setItem("selectedCourse", course.courseCode);
+                            window.location.href = "course_details.html";
+                        };
+        
+                        // Use course-specific image
+                        const img = document.createElement("img");
+                        img.src = course.image;
+                        img.alt = course.title;
+                        img.classList.add("course-image");
+                        courseItem.appendChild(img);
+        
+                        const courseInfo = document.createElement("div");
+                        courseInfo.classList.add("course-info");
+        
+                        const courseTitle = document.createElement("div");
+                        courseTitle.classList.add("course-title");
+                        courseTitle.textContent = course.title;
+                        courseInfo.appendChild(courseTitle);
+        
+                        const courseCode = document.createElement("div");
+                        courseCode.classList.add("course-code");
+                        courseCode.textContent = course.courseCode;
+                        courseInfo.appendChild(courseCode);
+        
+                        courseItem.appendChild(courseInfo);
+                        courseList.appendChild(courseItem);
+                    }
+                });
+            }
+        
+            function logout() {
+                // Clear session-specific data from localStorage
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('userType');
+                localStorage.removeItem('selectedCourse');
+                localStorage.removeItem('selectedAssignment');
+                
+                // Redirect to login page (task1.html)
+                window.location.href = "task1.html";
+            }
+        
+            window.onload = viewCourses;
+        </script>
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Instruction Documents - GSU</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+        padding-top: 70px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: "Poppins", sans-serif;
+        color: #333;
+      }
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        background-color: #1f3c88;
+        padding: 10px 20px;
+        display: flex;
+      }
+
+      .navbar-title {
+        color: white;
+        font-weight: bold;
+        margin-left: auto;
+        font-size: 1.2rem;
+      }
+
+      .navbar-links {
+        display: flex;
+      }
+
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px;
+        border-radius: 5px;
+        font-weight: 700;
+        transition: background-color 0.3s;
+        padding: 10px 15px;
+      }
+
+      .navbar a:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .form-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+        text-align: center;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: #1f3c88;
+        margin-bottom: 1rem;
+        font-weight: 900;
+        font-size: 2rem;
+      }
+
+      label {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 10px;
+        display: block;
+        font-weight: 700;
+      }
+
+      select, input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 5px;
+      }
+
+      button {
+        background-color: #1f3c88;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-weight: 700;
+        font-size: 1.2rem;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      button:hover {
+        background-color: #00509e;
+      }
+
+      .success-message {
+        color: green;
+        font-weight: 700;
+        margin-top: 1rem;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+  <!--Code pertaining to the navigation bar and links to the navigation bar-->
+  <div class="navbar">
+      <div class="navbar-links">
+        <a href="/home">Home</a>
+        <a href="/task6">Submit An Assignment</a>
+        <a href="/task15">Create Project Groups</a>
+        <a href="/task16">View Project Groups</a>
+        <a href="/task17">Upload a Project Instruction Document</a>
+        <a href="/task18">Submit Group Evaluations</a>
+      </div>
+      <div class="navbar-title">Instructor: Your Name</div>
+    </div>
+
+    <!-- Creating the container for which the form is in (with a header too)-->
+    <div class="form-container">
+      <h2>Upload Instruction Document</h2>
+
+      <!--Selects a class for which you want to submit an instruction document for-->
+      <label for="classSelect">Select Class:</label>
+      <select id="classSelect" name="classSelect" required>
+        <option value="">-- Select a Class --</option>
+        <option value="thermodynamics">Thermodynamics</option>
+        <option value="engmechanics">Engineering Mechanics</option>
+        <option value="mechvibrations">Mechanical Vibrations</option>
+        <option value="fluiddynamics">Fluid Dynamics</option>
+      </select>
+
+      <!--Creating a container to hold the projects which will be dynamically populated upon selecting a class-->
+      <label for="projectSelect">Select Project:</label>
+      <select id="projectSelect" name="projectSelect" required>
+        <option value="">-- Select a Project --</option>
+      </select>
+
+      <!--Code that enables a user to upload a file from their machine-->
+      <label for="fileUpload">Choose Instruction Document:</label>
+      <input
+        type="file"
+        id="fileUpload"
+        name="fileUpload"
+        accept=".pdf,.doc,.docx,.txt,.jgp,.png"
+        required
+      />
+
+      <!--Code for the button and the success message -->
+      <button id="uploadButton">Upload Document</button>
+      <p class="success-message" id="successMessage">
+        Document Uploaded Successfully!
+      </p>
+    </div>
+
+    <script>
+    // This is a mapping of key-value pairs of the class name to a string array of project names
+    const classToProjectMapping = {
+        thermodynamics: [
+          "Entropy Theory Project",
+          "Enthalpy Analysis Project",
+          "Heat Sink Design Project",
+          "Term Project",
+        ],
+        engmechanics: [
+          "Kinematics Simulation Project",
+          "Truss Bridge Design Project",
+          "Cantilever Analysis Project",
+          "Term Project",
+        ],
+        mechvibrations: [
+          "Damper Modelling Project",
+          "Forced Vibration Project",
+          "Free Vibrations Simulator",
+          "Isolation Model Simulator",
+        ],
+        fluiddynamics: [
+          "Turbulent Tap Project",
+          "Laminar Flow Project",
+          "Flow Gate Project",
+          "Term Project",
+        ],
+      };
+
+      // Populate project options based on selected class
+      // This adds an event listener to detect changes in class selection dropdown
+      // Takes the selected class value and puts it into a constant
+      // Uses the mapping above to check if there are any projects for the selected class
+      // Creates a dynamic dropdown under "Select Project"
+      document
+        .getElementById("classSelect")
+        .addEventListener("change", function () {
+          const classSelection = this.value;
+          const projectSelection = document.getElementById("projectSelect");
+
+          projectSelection.innerHTML = "";
+
+          if (classSelection && classToProjectMapping[classSelection]) {
+            classToProjectMapping[classSelection].forEach((project) => {
+              const option = document.createElement("option");
+              option.value = project;
+              option.text = project;
+              projectSelection.appendChild(option);
+            });
+          }
+        });
+
+      // Create a reference to the button that triggers the upload (using constant)
+      const uploadInstructionButton = document.getElementById("uploadButton");
+
+      // Create a reference to the success message (using constants)
+      const successMessageToDisplay = document.getElementById("successMessage");
+
+      // Create a click event listener for uploadButton
+      uploadInstructionButton.addEventListener("click", async function (event) {
+        event.preventDefault();
+
+        // Creating a reference to the file upload input (By the user)
+        const fileUploadInput = document.getElementById("fileUpload");
+
+        // These take the selected values for class and project and assign it to constants
+        const classSelectionValue = document.getElementById("classSelect").value;
+        const projectSelectionValue = document.getElementById("projectSelect").value;
+
+        // An if statement that checks to see if any REQUIRED fields are empty
+        if (
+          classSelectionValue === "" ||
+          projectSelectionValue === "" ||
+          fileUploadInput.files.length === 0
+        ) {
+          alert("Make sure to fill in all the fields and upload a file before you submit!");
+          return;
+        }
+
+        // Create a new FormData object that holds data for an eventual POST request in server.js
+        const formData = new FormData();
+        formData.append("assignment", fileUploadInput.files[0]);
+        formData.append("courseName", classSelectionValue);
+        formData.append("projectName", projectSelectionValue);
+
+        // Sends a POST request to the API route (in server.js) with the formData object that was created previously
+        try {
+          const uploadAssignmentInstructionsResponse = await fetch(
+            "/submit-assignment-instructions",
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+
+          const dataFromUpload = await uploadAssignmentInstructionsResponse.json();
+
+          // If the file upload was successful, then sends another POST request to log information about the file upload to the server
+          if (uploadAssignmentInstructionsResponse.ok) {
+            const logInformationDB = await fetch(
+              "/assignment-instructions-information",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  originalFilename: dataFromUpload.originalFilename,
+                  savedFilename: dataFromUpload.savedFilename,
+                  courseName: classSelectionValue,
+                  projectName: projectSelectionValue,
+                }),
+              }
+            );
+
+            // If the POST request was successful, then the form fields are cleared, fileInput is reset and the success message is displayed
+            // If the POST request was unsuccessful, then there is a failed message displayed as well
+            if (logInformationDB.ok) {
+              successMessageToDisplay.style.display = "block";
+              document.getElementById("classSelect").value = "";
+              document.getElementById("projectSelect").value = "";
+              fileUploadInput.value = "";
+            } else {
+              alert("Unfortunately, we could not log information into DynamoDB Table.");
+            }
+          } else {
+            alert("Sorry, could not upload the file.");
+          }
+        } catch (error) {
+          console.error("We got an error:", error);
+          alert("For some reason, an error occurred during the file upload.");
+        }
+      });
+    </script>
+  </body>
+</html>

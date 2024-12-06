@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLAP Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Login */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+        }
+
+        /* Logo Styles */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .letter {
+            transition: transform 1s ease;
+        }
+
+        /* Constant glow and rotate effect for the letter S */
+        .rotate-glow {
+            animation: rotateEffect 1s ease-in-out forwards;
+            color: #007bff;
+            text-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+        }
+
+        @keyframes rotateEffect {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        /* Login Container Styles */
+        .login-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.8rem;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        /* Button Group */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            width: 48%;
+            padding: 0.8rem;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #cancelBtn {
+            background-color: #dc3545;
+        }
+
+        #cancelBtn:hover {
+            background-color: #c82333;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .forgotpass {
+            padding: 0.9rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+        }
+
+        .forgotpass li a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 1rem;
+        }
+
+        .forgotpass li a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+
+    <div class="login-container">
+        <div class="logo-container">
+            <div class="logo">
+                <span class="letter">G</span>
+                <span class="letter" id="s-letter">S</span>
+                <span class="letter">U</span>
+            </div>
+            <div class="subtitle">Gould Street University</div>
+        </div>
+
+        <h1>Login to SLAP</h1>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="slapID">SLAP ID</label>
+                <input type="text" id="slapID" name="slapID" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="error-message" id="errorMessage"></div>
+
+            <div class="button-group">
+                <button type="submit" id="loginBtn">Log in to SLAP</button>
+                <button type="button" id="cancelBtn">Cancel LogIn</button>
+            </div>
+
+            <div class="no-space">
+                <ul class="forgotpass">
+                    <li><a href="task6.html">Forgot Password?</a></li>
+                </ul>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Add a 3-second delay before triggering the glow and rotate effect for the letter 'S'
+        window.onload = function() {
+            const sLetter = document.getElementById('s-letter');
+
+            setTimeout(() => {
+                sLetter.classList.add('rotate-glow');
+            }, 3000); // 3-second delay before the animation starts
+        }
+        //localStorage.removeItem('slapCredentials');
+        // Initialize credentials if not present in localStorage
+        if (!localStorage.getItem('slapCredentials')) {
+            const initialCredentials = [
+                { username: "student123", password: "password123", account: "student"},
+                { username: "student456", password: "password123", account: "student"},
+                { username: "root", password: "123", account: "admin"},
+                { username: "misic", password: "123", account: "instructor"}
+            ];
+            localStorage.setItem('slapCredentials', JSON.stringify(initialCredentials));
+        }
+
+        localStorage.removeItem('projects');
+        if (!localStorage.getItem('projects')) {
+            const projects = [
+                { name: "Entropy Theory Project", ID: 0, courseID: 0, dueDate: "2024-10-31"},
+                { name: "Enthalpy Analysis Project", ID: 1, courseID: 0, dueDate: "2024-11-14"},
+                { name: "Heat Sink Design Project", ID: 2, courseID: 0, dueDate: "2024-11-31"},
+                { name: "Term Project", ID: 3, courseID: 0, dueDate: "2024-12-14"},
+                { name: "Kinematics Simulation Project", ID: 4, courseID: 1, dueDate: "2024-10-31"},
+                { name: "Truss Bridge Design Project", ID: 5, courseID: 1, dueDate: "2024-11-14"},
+                { name: "Cantilever Analysis Project", ID: 6, courseID: 1, dueDate: "2024-11-31"},
+                { name: "Term Project", ID: 7, courseID: 1, dueDate: "2024-12-14"},
+                { name: "Damper Modeling Projects", ID: 8, courseID: 2, dueDate: "2024-10-31"},
+                { name: "Forced Vibration Project", ID: 9, courseID: 2, dueDate: "2024-11-14"},
+                { name: "Free Vibration Project", ID: 10, courseID: 2, dueDate: "2024-11-31"},
+                { name: "Isolation Model Simulator", ID: 11, courseID: 2, dueDate: "2024-12-14"},
+                { name: "Turbulent Tap Project", ID: 12, courseID: 3, dueDate: "2024-10-31"},
+                { name: "Laminar Flow Project", ID: 13, courseID: 3, dueDate: "2024-11-14"},
+                { name: "Flow Gate Project", ID: 14, courseID: 3, dueDate: "2024-11-31"},
+                { name: "Term Project", ID: 15, courseID: 3, dueDate: "2024-12-14"}
+            ];
+            localStorage.setItem('projects', JSON.stringify(projects));
+        }
+
+        localStorage.removeItem('assignmentsDetails');
+        // Assignment details and documents for each project
+        if (!localStorage.getItem('assignmentsDetails')) {
+            const assignmentsDetails = {
+                0: {
+                    title: "Entropy Theory Project",
+                    description: "Explore entropy in thermodynamics.",
+                    documents: [
+                        { name: "Assignment Details", url: "docs/Entropy_Theory_Project_Assignment_Details.pdf" },
+                        { name: "Sample Solution", url: "docs/Entropy_Theory_Project_Sample_Solution.pdf" }
+                    ]
+                },
+                1: {
+                    title: "Enthalpy Analysis Project",
+                    description: "Analyze enthalpy changes.",
+                    documents: [
+                        { name: "Assignment Details", url: "docs/Enthalpy_Analysis_Project_Assignment_Details.pdf" },
+                        { name: "Sample Solution", url: "docs/Enthalpy_Analysis_Project_Sample_Solution.pdf" }
+                    ]
+                },
+                4: {
+                    title: "Kinematics Simulation Project",
+                    description: "Simulate motion scenarios.",
+                    documents: [
+                        { name: "Assignment Details", url: "docs/Kinematics_Simulation_Project_Assignment_Details.pdf" },
+                        { name: "Sample Solution", url: "docs/Kinematics_Simulation_Project_Sample_Solution.pdf" }
+                    ]
+                }
+            };
+            localStorage.setItem('assignmentsDetails', JSON.stringify(assignmentsDetails));
+        }
+
+        // Clear existing evaluations to ensure the correct structure
+        localStorage.removeItem('evaluations');
+
+        if (!localStorage.getItem('evaluations')) {
+            const evaluations = {
+                "student123": {
+                    "0": {
+                        grade: "A",
+                        comments: "Excellent work on entropy analysis and clear explanations."
+                    },
+                    "1": {
+                        grade: "B+",
+                        comments: "Good effort, needs more detail in calculations."
+                    },
+                    "4":{
+                        grade: "C-",
+                        comments: "The simulation was exeucted incorrectly. The analysis was still correct."
+                    }
+                },
+                "student456": {
+                    "0": {
+                        grade: "B-",
+                        comments: "Good work on entropy analysis and clear explanations."
+                    },
+                    "1": {
+                        grade: "F",
+                        comments: "All calculations were incorrect."
+                    },
+                    "4":{
+                        grade: "A+",
+                        comments: "The simulation was exeucted perfectly. Amazing analysis with great attention to detail."
+                    }
+                }
+            };
+            localStorage.setItem('evaluations', JSON.stringify(evaluations));
+        }
+
+
+        // Clear existing latestSubmissions to ensure the correct structure
+        localStorage.removeItem('latestSubmissions');
+
+        if (!localStorage.getItem('latestSubmissions')) {
+            const latestSubmissions = {
+                "student123": {
+                    "0": {
+                        "title": "Final Submission for Entropy Project",
+                        "date": "2024-10-29",
+                        "status": "Submitted"
+                    },
+                    "1": {
+                        "title": "Final Submission for Enthalpy Analysis",
+                        "date": "2024-11-12",
+                        "status": "Submitted"
+                    },
+                    "4": {
+                        "title": "Final Submission for Kinematics Simulation Project",
+                        "date": "2024-10-12",
+                        "status": "Submitted"
+                    }
+                },
+                "student456": {
+                    "0": {
+                        "title": "Final Submission for Entropy Project",
+                        "date": "2024-10-28",
+                        "status": "Submitted"
+                    },
+                    "1": {
+                        "title": "Final Submission for Enthalpy Analysis",
+                        "date": "2024-10-22",
+                        "status": "Submitted"
+                    },
+                    "4": {
+                        "title": "Final Submission for Kinematics Simulation Project",
+                        "date": "2024-10-01",
+                        "status": "Submitted"
+                    }
+                }
+            };
+            localStorage.setItem('latestSubmissions', JSON.stringify(latestSubmissions));
+        }
+
+
+
+
+        //localStorage.removeItem('slapAlerts');
+        if (!localStorage.getItem('slapAlerts')) {
+            const initialAlerts = [
+                { ID: 0, title: "Test", text: "Placeholder", global: true, instructor_only: false, courses : [{}]},
+                { ID: 1, title: "Test", text: "Placeholder", global: false, instructor_only: false, courses : [{courseID: 0}, {courseID: 1}]}
+            ]
+            localStorage.setItem('slapAlerts', JSON.stringify(initialAlerts));
+        }
+
+        localStorage.removeItem('courses');
+        if (!localStorage.getItem('courses')) {
+            const initialCourses = [
+                { courseID: 0, title: "Thermodynamics", courseCode: "MEC305", courseDescription: "", image: "/course1.jpg", profSlapID: "misic", colour: "#0056b3",
+                    dates: {
+                        startDate: "2025-01-08",
+                        endDate: "2025-05-15",
+                        enrollmentDeadline: "2025-01-15"
+                    }
+                },
+                { courseID: 1, title: "Engineering Dynamics", courseCode: "MEC120", courseDescription: "", image: "/course2.jpg", profSlapID: "misic", colour: "#20561f",
+                    dates: {
+                        startDate: "2025-01-08",
+                        endDate: "2025-05-15",
+                        enrollmentDeadline: "2025-01-15"
+                    }
+                },
+                { courseID: 2, title: "Mechanical Vibrations", courseCode: "MEC310", courseDescription: "", image: "/course3.jpg", profSlapID: "misic", colour: "#f0568f",
+                    dates: {
+                        startDate: "2025-01-08",
+                        endDate: "2025-05-15",
+                        enrollmentDeadline: "2025-01-15"
+                    }
+                },
+                { courseID: 3, title: "Fluid Dynamics", courseCode: "MEC278", courseDescription: "", image: "/course4.jpg", profSlapID: "misic", colour: "#40f61f",
+                    dates: {
+                        startDate: "2025-01-08",
+                        endDate: "2025-05-15",
+                        enrollmentDeadline: "2025-01-15"
+                    }
+                }
+            ];
+            localStorage.setItem('courses', JSON.stringify(initialCourses));
+        }
+
+        localStorage.removeItem('studentCourseRegistration');
+        if (!localStorage.getItem('studentCourseRegistration')) {
+            const initialStudentCourseRegistration = [
+                { studentID: "student123", courseID: 0 },
+                { studentID: "student123", courseID: 1 },
+                { studentID: "student123", courseID: 2 },
+                { studentID: "student123", courseID: 3 },
+                { studentID: "student456", courseID: 0 },
+                { studentID: "student456", courseID: 1 }
+            ];
+            localStorage.setItem('studentCourseRegistration', JSON.stringify(initialStudentCourseRegistration));
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            const slapID = document.getElementById('slapID').value;
+            const password = document.getElementById('password').value;
+            const credentials = JSON.parse(localStorage.getItem('slapCredentials')) || [];
+
+            const user = credentials.find(user => user.username === slapID && user.password === password);
+
+            if (user) {
+                document.getElementById('errorMessage').textContent = "";
+                alert(`Welcome to SLAP, ${slapID}!`);
+                localStorage.setItem('currentUser', slapID);
+                localStorage.setItem('userType', user.account);
+                switch (user.account) {
+                    case "student":
+                        window.location.href = "student_dashboard.html"
+                        break;
+                    case "instructor":
+                        window.location.href = "instructor_dashboard.html"
+                        break;
+                    case "admin":
+                        window.location.href = "admin_dashboard.html"
+                        break;
+                }
+            }
+            else {
+                document.getElementById('errorMessage').textContent = "Invalid SLAP ID or password.";
+            }
+        });
+
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            document.getElementById('slapID').value = "";
+            document.getElementById('password').value = "";
+            document.getElementById('errorMessage').textContent = "";
+        });
+    </script>
+</body>
+</html>

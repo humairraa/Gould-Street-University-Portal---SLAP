@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gould Street University - Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* General Body and Font Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+        }
+
+        /* Container Styles */
+        .container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        #projectDueDate {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Document List Styles */
+        .document-list {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .document-item {
+            margin: 0.5rem 0;
+        }
+
+        .document-item button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .document-item button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Submission and Evaluation Sections */
+        .latest-submission, .evaluation-section {
+            display: none;
+            text-align: left;
+            margin-top: 1.5rem;
+        }
+
+        .submission-item, .evaluation-content {
+            background-color: #f0f4f8;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            color: #333;
+        }
+
+        /* Button Styles */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .action-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            flex: 1;
+        }
+
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Project Details</h1>
+        <p><strong id="projectTitle"></strong></p>
+        <p id="projectDueDate"></p>
+
+        <div class="document-list" id="documentList">
+            <!-- Document buttons will be dynamically generated here -->
+        </div>
+
+        <!-- Section for displaying submission details -->
+        <div class="latest-submission" id="latestSubmission">
+            <h2>Latest Submission</h2>
+            <div class="submission-item" id="latestSubmissionContent">No submission found.</div>
+        </div>
+
+        <!-- Section for displaying evaluation details -->
+        <div class="evaluation-section" id="evaluationSection">
+            <h2>Evaluation</h2>
+            <div class="evaluation-content" id="evaluationContent">
+                <p><strong>Grade:</strong> <span id="evaluationGrade">N/A</span></p>
+                <p><strong>Comments:</strong> <span id="evaluationComments">No comments available.</span></p>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <!-- View Submission Details button -->
+            <button class="action-button" id="viewSubmissionButton">View Submission Details</button>
+
+            <!-- View Evaluation button -->
+            <button class="action-button" id="viewEvaluationButton">View Evaluation</button>
+        </div>
+
+        <a href="course_details.html" class="back-link">Back to Course</a>
+    </div>
+
+    <script>
+        // Retrieve the selected assignment ID and current user from localStorage
+        const selectedAssignmentId = localStorage.getItem("selectedAssignment");
+        const currentUser = localStorage.getItem("currentUser");
+
+        // Retrieve projects, evaluations, and latest submissions from localStorage
+        const projects = JSON.parse(localStorage.getItem("projects")) || [];
+        const evaluations = JSON.parse(localStorage.getItem("evaluations")) || {};
+        const latestSubmissions = JSON.parse(localStorage.getItem("latestSubmissions")) || {};
+
+        // Find the selected project details
+        const project = projects.find(p => p.ID == selectedAssignmentId);
+
+        if (project) {
+            // Display project title and due date
+            document.getElementById("projectTitle").textContent = project.name || "Project Not Found";
+            document.getElementById("projectDueDate").textContent = `Due Date: ${project.dueDate}`;
+
+            // Generate document buttons for assignment details
+            const documentList = document.getElementById("documentList");
+            const assignmentDetails = JSON.parse(localStorage.getItem("assignmentsDetails")) || {};
+            const assignment = assignmentDetails[selectedAssignmentId];
+
+            if (assignment) {
+                assignment.documents.forEach(doc => {
+                    const docItem = document.createElement("div");
+                    docItem.classList.add("document-item");
+
+                    const docButton = document.createElement("button");
+                    docButton.textContent = `View ${doc.name}`;
+                    docButton.onclick = () => {
+                        window.open(doc.url, "_blank");
+                    };
+                    docItem.appendChild(docButton);
+                    documentList.appendChild(docItem);
+                });
+            } else {
+                console.log("Assignment details not found for selectedAssignmentId:", selectedAssignmentId);
+            }
+
+            // Set up View Submission Details button
+            document.getElementById("viewSubmissionButton").onclick = () => {
+                if (latestSubmissions[currentUser] && latestSubmissions[currentUser][selectedAssignmentId]) {
+                    const latestSubmission = latestSubmissions[currentUser][selectedAssignmentId];
+                    document.getElementById("latestSubmissionContent").innerHTML = `
+                        <strong>${latestSubmission.title}</strong><br>
+                        Date: ${latestSubmission.date}<br>
+                        Status: ${latestSubmission.status}
+                    `;
+                    document.getElementById("latestSubmission").style.display = "block";
+                } else {
+                    console.log("No submission found for user:", currentUser, "and assignment:", selectedAssignmentId);
+                    document.getElementById("latestSubmissionContent").textContent = "No submission found.";
+                }
+            };
+
+            // Set up View Evaluation button
+            document.getElementById("viewEvaluationButton").onclick = () => {
+                const userEvaluations = evaluations[currentUser] || {};
+                const evaluation = userEvaluations[selectedAssignmentId] || { grade: "N/A", comments: "No evaluation available." };
+                document.getElementById("evaluationGrade").textContent = evaluation.grade;
+                document.getElementById("evaluationComments").textContent = evaluation.comments;
+                document.getElementById("evaluationSection").style.display = "block";
+            };
+        } else {
+            document.getElementById("projectTitle").textContent = "Project Not Found";
+        }
+    </script>
+</body>
+</html>

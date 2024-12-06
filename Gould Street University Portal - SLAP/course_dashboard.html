@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLAP Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Login */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .top-banner {
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 110px; /* Set a fixed height to avoid dropdown expansion */
+        }
+
+        .logo-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-button {
+            font-size: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .logo-small {
+            font-size: 60px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow:1;
+            margin-top:50px;
+        }
+
+        /* Styles for dropdown */
+        .dropdown {
+            position: absolute; /* Position it absolute */
+            right: 20px; /* Align to the right */
+            padding-right: 10%;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 50%;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+            flex-direction: column; 
+        }
+
+        .logo {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .letter {
+            transition: transform 1s ease;
+        }
+
+        /* Constant glow and rotate effect for the letter S */
+        .rotate-glow {
+            animation: rotateEffect 1s ease-in-out forwards;
+            color: #007bff;
+            text-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+        }
+
+        @keyframes rotateEffect {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .main-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1600px;
+            width: 100%;
+            text-align:center;
+            margin-top:20px;
+            display: flex;               /* Apply flexbox */
+            justify-content: center;
+            gap: 20px;
+            flex-direction: row; 
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 2.8rem;
+            color: #333;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        #courseContainer {
+            display: flex; 
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .dash-button {
+            width: 300px;
+            height: 100px;
+            background-color: #e3e3f7;
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+        }
+        
+        .dash-button:hover {
+            background-color:  #007bff;
+        }
+
+        .courseHeader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        #courseTitleHeader {
+            font-weight: 400;
+        }
+        
+        .button-group {
+            width:60%;
+            display: flex;
+            flex-direction: row;
+            gap:20px;
+        }
+        
+        .project-button {
+            font-size: 20px;
+            width:100%;
+            border:none;
+            background-color: #e3e3f7;
+            cursor: pointer;
+        }
+
+        .project-button:hover {
+            color:#007bff;
+        }
+
+        .projects-view {
+            gap:5px;
+            margin:10px;
+        }
+
+        .overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Ensure it's above other content */
+        }
+        
+        /* Overlay content box */
+        .overlay-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .overlay-content input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        
+        .overlay-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .overlay-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        #saveProjectButton {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        #closeOverlayButton {
+            background-color: #f44336;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="top-banner">
+        <div class="logo-container">
+            <button class="logo-button" id="logoButton">
+                <div class="logo-small">
+                    <span class="letter">G</span>
+                    <span class="letter" id="s-letter">S</span>
+                    <span class="letter">U</span>
+                </div>
+            </button>
+        </div>
+
+        <!-- Dropdown for Account button, aligned to the right -->
+        <div class="dropdown">
+            <button class="logout-button" onclick="toggleDropdown()">Account <span style="font-size: 0.8em;">&#9660;</span></button>
+            <div class="dropdown-content" id="dropdownContent" style="display: none;">
+                <a href="#" onclick="window.location.href='task5.html'">Change Password</a>
+                <a href="#" onclick="window.location.href='task2.html'">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="courseHeader-container">
+        <h1 id="courseCodeHeader"></h1>
+        <h1 id="courseTitleHeader"></h1>
+    </div>
+    <div class="main-container">
+        <div class="button-group">
+            <button class="dash-button" id="createProjectButton">New Project</button>
+            <button class="dash-button" id="editProjectButton">Edit Project</button>
+        </div>
+
+        <div class="projects-view">
+            <h2>Current Projects</h2>
+        </div>
+    </div>
+
+    <div id="projectOverlay" class="overlay">
+        <div class="overlay-content">
+            <h2>Create New Project</h2>
+            <label for="projectName">Project Name:</label>
+            <input type="text" id="projectName" placeholder="Enter project name">
+            
+            <label for="dueDate">Due Date:</label>
+            <input type="date" id="dueDate">
+            
+            <div class="overlay-buttons">
+                <button id="saveProjectButton">Save</button>
+                <button id="closeOverlayButton">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add a 3-second delay before triggering the glow and rotate effect for the letter 'S'
+        window.onload = function() {
+            const sLetter = document.getElementById('s-letter');
+
+            setTimeout(() => {
+                sLetter.classList.add('rotate-glow');
+            }, 3000); // 3-second delay before the animation starts
+        }
+
+        // Function to toggle the dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById("dropdownContent");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close the dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.logout-button')) {
+                const dropdown = document.getElementById("dropdownContent");
+                if (dropdown && dropdown.style.display === "block") {
+                    dropdown.style.display = "none";
+                }
+            }
+        }
+
+        //localStorage.removeItem('projects');
+        if (!localStorage.getItem('projects')) {
+            const projects = [
+                { name: "Entropy Theory Project", ID: 0, courseID: 0, dueDate: "2024-10-31"},
+                { name: "Enthalpy Analysis Project", ID: 1, courseID: 0, dueDate: "2024-11-14"},
+                { name: "Heat Sink Design Project", ID: 2, courseID: 0, dueDate: "2024-11-31"},
+                { name: "Term Project", ID: 3, courseID: 0, dueDate: "2024-12-14"},
+                { name: "Kinematics Simulation Project", ID: 4, courseID: 1, dueDate: "2024-10-31"},
+                { name: "Truss Bridge Design Project", ID: 5, courseID: 1, dueDate: "2024-11-14"},
+                { name: "Cantilever Analysis Project", ID: 6, courseID: 1, dueDate: "2024-11-31"},
+                { name: "Term Project", ID: 7, courseID: 1, dueDate: "2024-12-14"},
+                { name: "Damper Modeling Projects", ID: 8, courseID: 2, dueDate: "2024-10-31"},
+                { name: "Forced Vibration Project", ID: 9, courseID: 2, dueDate: "2024-11-14"},
+                { name: "Free Vibration Project", ID: 10, courseID: 2, dueDate: "2024-11-31"},
+                { name: "Isolation Model Simulator", ID: 11, courseID: 2, dueDate: "2024-12-14"},
+                { name: "Turbulent Tap Project", ID: 12, courseID: 3, dueDate: "2024-10-31"},
+                { name: "Laminar Flow Project", ID: 13, courseID: 3, dueDate: "2024-11-14"},
+                { name: "Flow Gate Project", ID: 14, courseID: 3, dueDate: "2024-11-31"},
+                { name: "Term Project", ID: 15, courseID: 3, dueDate: "2024-12-14"}
+            ];
+            localStorage.setItem('projects', JSON.stringify(projects));
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentUser = localStorage.getItem("currentUser");
+            const courses = JSON.parse(localStorage.getItem("courses")) || [];
+            const courseID = parseInt(getQueryParam('courseID'),10);
+        
+            const course = courses.find(course => course.courseID === courseID);
+            const courseCodeHeader = document.getElementById('courseCodeHeader');
+            const courseTitleHeader = document.getElementById('courseTitleHeader');
+            if (course) {
+                courseCodeHeader.textContent = `${course.courseCode}`;
+                courseTitleHeader.textContent = `${course.title}`;
+            }
+
+            const projects = JSON.parse(localStorage.getItem('projects')) || [];
+            const courseProjects = projects.filter(project => project.courseID === courseID);
+            const projectsViewContainer = document.querySelector('.projects-view');
+
+            courseProjects.forEach(project => {
+                // Create button element
+                const projectButton = document.createElement('button');
+                projectButton.className = 'project-button';
+                projectButton.textContent = `${project.name} - Due: ${project.dueDate}`;
+                
+                // Add event listener to redirect to assignment_view.html with project ID
+                projectButton.addEventListener('click', () => {
+                    window.location.href = `assignment_view.html?projectID=${project.ID}`;
+                });
+
+                projectsViewContainer.appendChild(projectButton);
+            });
+
+        });
+
+        /* Use Case 13 Implemented here via Overlay */
+        document.getElementById("createProjectButton").addEventListener("click", function() {
+            document.getElementById("projectOverlay").style.display = "flex";
+        });
+        
+        document.getElementById("closeOverlayButton").addEventListener("click", function() {
+            document.getElementById("projectOverlay").style.display = "none";
+        });
+        
+        document.getElementById("saveProjectButton").addEventListener("click", function() {
+            const projectName = document.getElementById("projectName").value;
+            const dueDate = document.getElementById("dueDate").value;
+        
+            if (projectName && dueDate) {
+                const courseID = parseInt(getQueryParam('courseID'),10);
+                const projects = JSON.parse(localStorage.getItem('projects')) || [];
+                console.log(projects);
+                const maxID = projects.reduce((max, project) => Math.max(max, project.ID), -1);
+
+                projects.push({
+                    name: projectName,
+                    ID: maxID + 1,
+                    courseID: courseID,
+                    dueDate: dueDate
+                });
+
+                localStorage.setItem('projects', JSON.stringify(projects));
+
+                // Create button element
+                const projectButton = document.createElement('button');
+                projectButton.className = 'project-button';
+                projectButton.textContent = `${projectName} - Due: ${dueDate}`;
+
+                projectButton.addEventListener('click', () => {
+                    window.location.href = `assignment_view.html?projectID=${maxID + 1}`;
+                });
+                const projectsViewContainer = document.querySelector('.projects-view');
+                projectsViewContainer.appendChild(projectButton);
+
+                alert(`Project "${projectName}" with due date "${dueDate}" has been saved.`);
+                document.getElementById("projectOverlay").style.display = "none";
+            } else {
+                alert("Please enter both a project name and a due date.");
+            }
+        });
+
+        // Helper function to get query parameter by name
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        document.getElementById('logoButton').addEventListener('click', function() {
+            const userType = localStorage.getItem('userType'); 
+            switch (userType) {
+                case "student":
+                    window.location.href = "student_dashboard.html"
+                    break;
+                case "instructor":
+                    window.location.href = "instructor_dashboard.html"
+                    break;
+                case "admin":
+                    window.location.href = "admin_dashboard.html"
+                    break;
+            }
+        });
+
+        document.getElementById('createProjectButton').addEventListener('click', function() {
+            return;
+        });
+        document.getElementById('editProjectButton').addEventListener('click', function() {
+            window.location.href = 'task14.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLAP Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Login */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .top-banner {
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 110px; /* Set a fixed height to avoid dropdown expansion */
+        }
+
+        .logo-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-button {
+            font-size: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .logo-small {
+            font-size: 60px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow:1;
+            margin-top:50px;
+        }
+
+        /* Styles for dropdown */
+        .dropdown {
+            position: absolute; /* Position it absolute */
+            right: 20px; /* Align to the right */
+            padding-right: 10%;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 50%;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+            flex-direction: column; 
+        }
+
+        .logo {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .letter {
+            transition: transform 1s ease;
+        }
+
+        /* Constant glow and rotate effect for the letter S */
+        .rotate-glow {
+            animation: rotateEffect 1s ease-in-out forwards;
+            color: #007bff;
+            text-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+        }
+
+        @keyframes rotateEffect {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .main-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1600px;
+            width: 100%;
+            text-align:center;
+            margin-top:20px;
+            display: flex;               /* Apply flexbox */
+            justify-content: center;
+            gap: 20px;
+            flex-direction: row; 
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 2.8rem;
+            color: #333;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .button-group {
+            width:60%;
+            display: flex;
+            flex-direction: row;
+            gap:20px;
+        }
+        
+        .slap-button {
+            font-size: 20px;
+            width:100%;
+            border:none;
+            background-color: #e3e3f7;
+            cursor: pointer;
+        }
+
+        .slap-button:hover {
+            color:#00a2ff;
+        }
+
+        .slaps-view {
+            gap:5px;
+            margin:10px;
+            width: 50%;
+        }
+
+        h2 {
+            margin-bottom:3%;
+        }
+
+        .overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Ensure it's above other content */
+        }
+        
+        /* Overlay content box */
+        .overlay-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 500px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .close-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #1431b1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .close-button:hover {
+            background-color: #0e2086;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="top-banner">
+        <div class="logo-container">
+            <button class="logo-button" id="logoButton">
+                <div class="logo-small">
+                    <span class="letter">G</span>
+                    <span class="letter" id="s-letter">S</span>
+                    <span class="letter">U</span>
+                </div>
+            </button>
+        </div>
+
+        <!-- Dropdown for Account button, aligned to the right -->
+        <div class="dropdown">
+            <button class="logout-button" onclick="toggleDropdown()">Account <span style="font-size: 0.8em;">&#9660;</span></button>
+            <div class="dropdown-content" id="dropdownContent" style="display: none;">
+                <a href="#" onclick="window.location.href='task5.html'">Change Password</a>
+                <a href="#" onclick="window.location.href='task2.html'">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="slaps-view">
+            <h2>Your SLAPs</h2>
+        </div>
+    </div>
+
+    <div id="slap-overlay" class="overlay">
+        <div class="overlay-content">
+            <h2 id="slap-title"></h2>
+            <p id="slap-text"></p>
+            <button onclick="closeOverlay()" class="close-button">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Add a 3-second delay before triggering the glow and rotate effect for the letter 'S'
+        window.onload = function() {
+            const sLetter = document.getElementById('s-letter');
+
+            setTimeout(() => {
+                sLetter.classList.add('rotate-glow');
+            }, 3000); // 3-second delay before the animation starts
+        }
+
+        // Function to toggle the dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById("dropdownContent");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close the dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.logout-button')) {
+                const dropdown = document.getElementById("dropdownContent");
+                if (dropdown && dropdown.style.display === "block") {
+                    dropdown.style.display = "none";
+                }
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentUser = localStorage.getItem("currentUser");
+            const userType = localStorage.getItem("userType");
+            const courses = JSON.parse(localStorage.getItem("courses")) || [];
+            const slaps = JSON.parse(localStorage.getItem("slapAlerts")) || [];
+            const courseRegistration = JSON.parse(localStorage.getItem("studentCourseRegistration")) || [];
+            
+            let relevantSlaps = slaps.filter(slap => {
+                if (userType === "instructor") {
+                    // Instructors see all global and instructor-only alerts
+                    return slap.global || slap.instructor_only;
+                } else {
+                    // Students see all global alerts and alerts related to their courses
+                    return slap.global || slap.courses.some(course => 
+                        courseRegistration.some(reg => reg.studentID === currentUser && reg.courseID === course.courseID)
+                    );
+                }
+            });
+            const slapsView = document.querySelector('.slaps-view');
+            // Populate the slaps-view with filtered SLAPs
+            relevantSlaps.forEach(slap => {
+                const slapButton = document.createElement('button');
+                slapButton.className = 'slap-button';
+                slapButton.innerText = slap.title;
+                slapButton.onclick = () => showSlapOverlay(slap);
+                slapsView.appendChild(slapButton);
+            });
+
+        });
+
+        function showSlapOverlay(slap) {
+            const slapOverlay = document.getElementById('slap-overlay');
+            const slapTitle = document.getElementById('slap-title');
+            const slapText = document.getElementById('slap-text');
+            slapTitle.innerText = slap.title;
+            slapText.innerText = slap.text;
+        
+            slapOverlay.style.display = 'flex';
+        
+            // Close overlay on click outside
+            slapOverlay.onclick = function(event) {
+                if (event.target === slapOverlay) {
+                    slapOverlay.style.display = 'none';
+                }
+            };
+        }
+
+        function closeOverlay() {
+            const slapOverlay = document.getElementById('slap-overlay');
+            slapOverlay.style.display = 'none';
+        }
+
+        document.getElementById('logoButton').addEventListener('click', function() {
+            const userType = localStorage.getItem('userType'); 
+            switch (userType) {
+                case "student":
+                    window.location.href = "student_dashboard.html"
+                    break;
+                case "instructor":
+                    window.location.href = "instructor_dashboard.html"
+                    break;
+                case "admin":
+                    window.location.href = "admin_dashboard.html"
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>

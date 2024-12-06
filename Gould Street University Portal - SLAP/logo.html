@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSU Logo - Gould Street University</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+
+        .logo-container {
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .letter {
+            transition: transform 1s ease;
+        }
+
+        /* Constant glow and rotate effect for the letter S */
+        .rotate-glow {
+            animation: rotateEffect 1s ease-in-out forwards;
+            color: #007bff;
+            text-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+        }
+
+        @keyframes rotateEffect {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: #333;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="logo-container">
+    <div class="logo">
+        <span class="letter">G</span>
+        <span class="letter" id="s-letter">S</span>
+        <span class="letter">U</span>
+    </div>
+    <div class="subtitle">Gould Street University</div>
+</div>
+
+<script>
+    // Add a 3-second delay before triggering the glow and rotate effect for the letter 'S'
+    window.onload = function() {
+        const sLetter = document.getElementById('s-letter');
+        
+        setTimeout(() => {
+            sLetter.classList.add('rotate-glow');
+        }, 3000); // 3-second delay before the animation starts
+    }
+</script>
+
+</body>
+</html>

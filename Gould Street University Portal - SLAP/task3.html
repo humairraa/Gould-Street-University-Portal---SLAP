@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLAP-View Messaage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Login */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .top-banner {
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 110px; /* Set a fixed height to avoid dropdown expansion */
+        }
+
+        .logo-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-button {
+            font-size: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .logo-small {
+            font-size: 60px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow:1;
+            margin-top:50px;
+        }
+
+        /* Styles for dropdown */
+        .dropdown {
+            position: absolute; /* Position it absolute */
+            right: 20px; /* Align to the right */
+            padding-right: 10%;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 50%;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20vh;
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+
+        .logo {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+        .message-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .letter {
+            transition: transform 1s ease;
+        }
+
+        /* Constant glow and rotate effect for the letter S */
+        .rotate-glow {
+            animation: rotateEffect 1s ease-in-out forwards;
+            color: #007bff;
+            text-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+        }
+
+        @keyframes rotateEffect {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .main-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.8rem;
+            color: #007bff;
+        }
+
+        .message-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .message-item {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .message-item:hover {
+            background-color: #e0e7ff;
+        }
+
+        .message-header {
+            font-weight: bold;
+            color: #1f3c88;
+        }
+
+        .message-body {
+            margin-top: 0.5rem;
+            color: #555;
+        }
+
+        .message-actions {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .close-btn {
+            background-color: #dc3545;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background-color: #c82333;
+        }
+
+        .message-empty {
+            color: #888;
+            font-style: italic;
+        }
+        /* Button Group */
+        .button-group {
+            margin-top: 2rem;
+        }
+
+        #createButton,#cancelMessage,#saveDraft {
+            width: 48%;
+            padding: 0.8rem;
+            background-color: #00ff6a;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #createButton:hover {
+            background-color: #1eb300;
+        }
+        #saveDraft {
+            background-color: #007bff;
+        }
+        #saveDraft:hover {
+            background-color: #1f3c88;
+        }
+        #cancelMessage {
+            background-color: #dc3545;
+        }
+
+        #cancelMessage:hover {
+            background-color: #a81927;
+        }
+        #slap {
+            width: 100%;           /* Full width of the form */
+            padding: 10px;        /* Padding inside the textarea */
+            box-sizing: border-box; /* Include padding in width */
+            resize: none;         /* Disable resizing */
+            margin-bottom: 1rem;
+        }
+        #title {
+            width: 100%;           /* Full width of the form */
+            padding: 10px;        /* Padding inside the input */
+            box-sizing: border-box; /* Include padding in width */
+            margin-top: 5px;     /* Add some space above the input */
+            margin-bottom: 10px;  /* Add some space below the input */
+            font-size: 20px;
+            font-weight: 500; 
+        }
+        /* Error Message */
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .radio-group {
+            display: flex; /* Flexbox to align items in a row */
+            gap: 1rem;     /* Space between radio buttons */
+            margin-top: 0.5rem;
+            margin-bottom: 1.0rem;
+        }
+    
+        .radio-group div {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-group label {
+            margin-left: 0.5rem; /* Adjust as needed for spacing */
+            padding-left: 0.3rem; /* Optional padding for extra space */
+        }
+    </style>
+</head>
+<body>
+    <div class="top-banner">
+        <div class="logo-container">
+            <button class="logo-button" id="logoButton">
+                <div class="logo-small">
+                    <span class="letter">G</span>
+                    <span class="letter" id="s-letter">S</span>
+                    <span class="letter">U</span>
+                </div>
+            </button>
+        </div>
+    
+        <!-- Dropdown for Account button, aligned to the right -->
+        <div class="dropdown">
+            <button class="logout-button" onclick="toggleDropdown()">Account <span style="font-size: 0.8em;">&#9660;</span></button>
+            <div class="dropdown-content" id="dropdownContent" style="display: none;">
+                <a href="#" onclick="window.location.href='task5.html'">Change Password</a>
+                <a href="#" onclick="window.location.href='task2.html'">Logout</a>
+            </div>
+        </div>
+        
+        </div>
+
+         <div class = "message-container">
+          <h1> New Message Notifications</h1>
+           <ul class="message-list" id="messageList">
+             <!-- Messages will be dynamically loaded here -->
+          </ul>
+          <p class="message-empty" id="emptyMessage">No new messages</p>
+        </div>
+    
+    
+    <script>
+        // Add a 3-second delay before triggering the glow and rotate effect for the letter 'S'
+        window.onload = function() {
+            const sLetter = document.getElementById('s-letter');
+
+            setTimeout(() => {
+                sLetter.classList.add('rotate-glow');
+            }, 3000); // 3-second delay before the animation starts
+            displayMessages();
+        }
+        
+        // Function to toggle the dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById("dropdownContent");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close the dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.logout-button')) {
+                const dropdown = document.getElementById("dropdownContent");
+                if (dropdown && dropdown.style.display === "block") {
+                    dropdown.style.display = "none";
+                }
+            }
+        }
+        let messages = [
+            { id: 1, subject: "System Maintenance", body: "The system will be down for maintenance this Friday from 2 PM to 4 PM.", read: false },
+            { id: 2,  subject: "Course Updates", body: "New courses will be added to the SLAP portal for next semester on January 02,2025.", read: false },
+            { id: 3, subject: "Issues has been resolved", body: "All the issues related to Log In portal has been adressed.", read: false },
+            { id: 4, subject: "Technical Issues", body: "It has been come to our attention that some users are facing Issues to Log In to SLAP portal we are trying to resolve issues.", read: false },
+        ];
+
+        // Function to display messages
+        function displayMessages() {
+            messageList.innerHTML = ''; // Clear the list first
+
+            // Filter out read messages for display
+            const unreadMessages = messages.filter(message => !message.read);
+
+            if (unreadMessages.length === 0) {
+                emptyMessage.style.display = 'block'; // Show "No new messages" if there are no unread messages
+            } else {
+                emptyMessage.style.display = 'none'; // Hide the "No new messages" message
+
+                // Iterate over the messages and create list items
+                unreadMessages.forEach((message) => {
+                    const li = document.createElement('li');
+                    li.classList.add('message-item');
+                    li.innerHTML = `
+                        <div class="message-header">${message.subject}</div>
+                        <div class="message-body">${message.body}</div>
+                    `;
+
+                    // Add close button to each message
+                    const closeBtn = document.createElement('button');
+                    closeBtn.textContent = 'Close';
+                    closeBtn.classList.add('close-btn');
+                    closeBtn.addEventListener('click', () => {
+                        // Mark message as read and update the display
+                        markMessageAsRead(message.id);
+                    });
+
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.classList.add('message-actions');
+                    actionsDiv.appendChild(closeBtn);
+                    li.appendChild(actionsDiv);
+
+                    messageList.appendChild(li);
+                });
+            }
+        }
+
+        // Function to mark a message as read and refresh the display
+        function markMessageAsRead(messageId) {
+            // Find the message by ID and set its "read" property to true
+            const message = messages.find(msg => msg.id === messageId);
+            if (message) {
+                message.read = true;
+            }
+            displayMessages(); // Refresh the message list display
+        }
+
+        
+
+        document.getElementById('logoButton').addEventListener('click', function() {
+            const userType = localStorage.getItem('userType'); 
+            console.log(userType);
+            switch (userType) {
+                case "student":
+                    window.location.href = "student_dashboard.html"
+                    break;
+                case "instructor":
+                    window.location.href = "instructor_dashboard.html"
+                    break;
+                case "admin":
+                    window.location.href = "admin_dashboard.html"
+                    break;
+            }
+        });
+        // Helper function to get query parameter by name
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+    </script>
+</body>
+</html>

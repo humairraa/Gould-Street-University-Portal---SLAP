@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal GSU - Submit Assignment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+      padding-top: 70px; 
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .navbar {
+      position: fixed; 
+      top: 0; 
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      background-color: #1f3c88;
+      padding: 20px 20px;
+      display: flex;
+    }
+
+    .navbar-title {
+      color: white; 
+      font-weight: bold; 
+      margin-left: auto; 
+      font-size: 1.2rem; 
+    }
+
+    .navbar-links {
+      display: flex;
+    }
+
+    .navbar a {
+      color: white; 
+      text-decoration: none;
+      margin: 0 20px; 
+      border-radius: 6px; 
+      transition: background-color 0.4s;
+      padding: 10px 15px; 
+    }
+
+    .navbar a:hover {
+      background-color: rgba(255, 255, 255, 0.3); 
+    }
+
+    .logo-text {
+      text-align: center;
+      margin: 20px 5; 
+    }
+
+    h1 {
+      font-size: 4rem;
+      color: #1f3c88;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      letter-spacing: 5px;
+      display: flex;
+    }
+
+    p {
+      letter-spacing: 1px;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #333;
+      margin-bottom: 2rem;
+    }
+
+    #first-submit-button {
+      background-color: #1f3c88;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 15px 20px;
+      font-size: 1.5rem;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    #first-submit-button:hover {
+      background-color: #007bff;
+    }
+
+    .modal-overhead {
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .modal-content {
+      background-color: white;
+      border: 2px solid #888;
+      border-radius: 9px;
+      margin: 20% auto;
+      padding: 25px;
+      width: 100%;
+      max-width: 525px;
+    }
+
+    .close-modal {
+      color: #1f3c88;
+      float: right;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .close-modal:hover, .close-modal:focus {
+      color: black;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    h2 {
+      color: #1f3c88;
+      margin-bottom: 20px;
+    }
+
+    label {
+      color: #1f3c88;
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    input[type="file"] {
+      margin: 10px 20px 10px 0;
+    }
+
+    button[type="submit"] {
+      color: #1f3c88;
+      background-color: gold;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 10px 20px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #e6b800;
+    }
+
+    .rotating-glowing-letter {
+      color: #007bff;
+      text-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+      animation: rotateEffect 1s ease-in-out forwards;
+    }
+
+    @keyframes rotateEffect {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!--Code pertaining to the navigation bar and links to the navigation bar-->
+  <div class="navbar">
+    <div class="navbar-links">
+      <a href="/home">Home</a>
+    </div>
+    <div class="navbar-title">Student: </div>
+  </div>
+
+  <!--Code that focuses on the header of the page itself (and the text)-->
+  <div class="logo-text">
+    <h1>
+      <span class="just-a-letter">G</span>
+      <span class="rotating-glowing-letter">S</span>
+      <span class="just-a-letter">U</span>
+    </h1>
+    <p>Gould Street University</p>
+  </div>
+
+  <!--Code for the 'Submit Assignment' button-->
+  <button id="first-submit-button">Submit Assignment</button>
+
+  <!--Code for the modal that opens when you click on the 'Submit Assignment Button'-->
+  <div id="completeModal" class="modal-overhead">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Submit Your Assignment</h2>
+
+      <form id="assignmentSubmissionForm" enctype="multipart/form-data">
+        <label for="fileUpload">Select Your Assignment:</label>
+        <input type="file" id="studentFileUpload" name="fileUpload" required>
+        <br><br>
+
+        <!--'Submit Assignment' button-->
+        <button type="submit">Submit Assignment</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Referencing the modal elements and assigning them to constants
+    const completeModal = document.getElementById('completeModal');
+    const firstSubmitButton = document.getElementById('first-submit-button');
+    const closeModal = document.getElementsByClassName('close-modal')[0];
+
+    // Opens the modal
+    firstSubmitButton.onclick = function() {
+      completeModal.style.display = 'block';
+    };
+
+    // Closes the modal
+    closeModal.onclick = function() {
+      completeModal.style.display = 'none';
+    };
+
+    // Checks to see if the user clicks anywhere outside the modal
+    // Closes modal upon clicking outside of the modal 
+    window.onclick = function(event) {
+      if (event.target == completeModal) {
+        completeModal.style.display = 'none';
+      }
+    };
+
+    // There is an event listener attached to the submit assignment button in the modal
+    // A FormData object is created, a file from fileUpload is attached to it 
+    // When the assignment gets submitted, it sends an API post request to upload the assignment the student wishes to submit
+    // If the request is successful, then an alert saying that the assignment was submitted successfully appears
+    // If the request is unsuccessful, there is an alert saying that there was an error submitting the assignment
+    document.getElementById('assignmentSubmissionForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      
+      const formData = new FormData();
+      const studentUpload = document.getElementById('studentFileUpload');
+      formData.append('assignment', studentUpload.files[0]);
+
+      try {
+        const response = await fetch('/submit-assignment', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          alert('Congratulations! Your assignment was submitted successfully!');
+          completeModal.style.display = 'none';
+        } else {
+          alert('Unfortunately, you failed to submit assignment');
+        }
+      } catch (error) {
+        alert('Unfortunately, an error occurred while submitting the assignment', error);
+      }
+    });
+  </script>
+</body>
+</html>

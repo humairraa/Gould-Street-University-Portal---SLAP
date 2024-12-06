@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submit Evaluations - GSU</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+        padding-top: 70px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: "Poppins", sans-serif;
+        color: #333;
+      }
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        background-color: #1f3c88;
+        padding: 10px 20px;
+        display: flex;
+      }
+
+      .navbar-title {
+        color: white;
+        font-weight: bold;
+        margin-left: auto;
+        font-size: 1.2rem;
+      }
+
+      .navbar-links {
+        display: flex;
+      }
+
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px;
+        border-radius: 5px;
+        font-weight: 700;
+        transition: background-color 0.3s;
+        padding: 10px 15px;
+      }
+
+      .navbar a:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .logo-text {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      h1 {
+        letter-spacing: 5px;
+        color: #1f3c88;
+        font-size: 80px;
+        font-weight: 900;
+      }
+
+      p {
+        letter-spacing: 1px;
+        font-size: 24px;
+        color: #333;
+        margin-top: 10px;
+      }
+
+      .form-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 600px;
+      }
+
+      h2 {
+        color: #1f3c88;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      label {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        display: block;
+        color: #1f3c88;
+      }
+
+      select, input[type="text"], textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 5px;
+      }
+
+      button {
+        background-color: #1f3c88;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      button:hover {
+        background-color: #00509e;
+      }
+
+      .success-message {
+        color: green;
+        margin-top: 1rem;
+        font-weight: bold;
+        display: none;
+        text-align: center;
+      }
+
+      .checkmark {
+        display: none;
+        font-size: 2rem;
+        color: green;
+        text-align: center;
+      }
+
+      .text-area-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+  <!--Code pertaining to the navigation bar and links to the navigation bar-->
+  <div class="navbar">
+      <div class="navbar-links">
+        <a href="/home">Home</a>
+        <a href="/task6">Submit An Assignment</a>
+        <a href="/task15">Create Project Groups</a>
+        <a href="/task16">View Project Groups</a>
+        <a href="/task17">Upload a Project Instruction Document</a>
+        <a href="/task18">Submit Group Evaluations</a>
+      </div>
+      <div class="navbar-title">Instructor: Your Name</div>
+    </div>
+
+  <!--Code that focuses on the logo and header of the page itself-->
+  <div class="logo-text">
+      <h1>GSU</h1>
+      <p>Gould Street University</p>
+    </div>
+
+    <!-- Creating the container for which the form is in (with a header too)-->
+    <div class="form-container">
+      <h2>Submit Evaluations</h2>
+
+      <!--Starting to look at dropdown selection menus (for class)---->
+      <label for="classSelect">Select Class:</label>
+      <select id="classSelect" name="classSelect" required>
+        <option value="">-- Select a Class --</option>
+        <option value="thermodynamics">Thermodynamics</option>
+        <option value="engmechanics">Engineering Mechanics</option>
+        <option value="mechvibrations">Mechanical Vibrations</option>
+        <option value="fluiddynamics">Fluid Dynamics</option>
+      </select>
+
+      <!--Select a project to do an evaluation for (creates a container to be dynamically populated)-->
+      <label for="projectSelect">Select Project:</label>
+      <select id="projectSelect" name="projectSelect" required>
+        <option value="">-- Select a Project --</option>
+      </select>
+
+      <!--Select a group to do an evaluation for (creates a container to be dynamically populated)-->
+      <label for="studentSelect">Select Group:</label>
+      <select id="studentSelect" name="studentSelect" required>
+        <option value="">-- Select a Group --</option>
+      </select>
+
+      <!--Creates a text box to give a grade (number)-->
+      <label for="gradeInput">Grade Given:</label>
+      <input
+        type="text"
+        id="gradeInput"
+        name="gradeInput"
+        placeholder="Enter grade (between 0-100)"
+        required
+      />
+
+      <!--Creates a label to enter an evaluation-->
+      <label for="evaluationInput" class="text-area-title"
+        >Enter Evaluation:</label
+      >
+
+      <!--Creates a textbox for instructor to input comments on the group's work-->
+      <textarea
+        id="evaluationInput"
+        name="evaluationInput"
+        rows="4"
+        required
+        placeholder="Comments about the group's work..."
+      ></textarea>
+
+      <!--Creates a button for the user to submit the form-->
+      <button id="submitButton">Submit Evaluation</button>
+    </div>
+
+    <script>
+      document
+
+      // There is an event listener that looks for changes in classSelect dropdown
+      // An API GET request is sent to retrieve project data
+      // Projects are filtered out from the data sent by the API and used to dynamically populate the 'Select a Project' dropdown
+        .getElementById("classSelect")
+        .addEventListener("change", async function () {
+          const classSelection = this.value;
+          const projectSelection = document.getElementById("projectSelect");
+          projectSelection.innerHTML =
+            '<option value="">-- Select a Project --</option>';
+
+          if (classSelection) {
+            try {
+              const response = await fetch(
+                "/get-assignment-instructions-information"
+              );
+              const projectData = await response.json();
+
+              if (response.ok) {
+                const uniqueProjectNames = new Set();
+
+                const filteredProjectData = projectData.filter(
+                  (project) => project.Course_Name === classSelection
+                );
+
+                filteredProjectData.forEach((project) => {
+                  if (!uniqueProjectNames.has(project.Project_Name)) {
+                    uniqueProjectNames.add(project.Project_Name);
+
+                    const option = document.createElement("option");
+                    option.value = project.Project_Name;
+                    option.textContent = project.Project_Name;
+                    projectSelection.appendChild(option);
+                  }
+                });
+              } else {
+                alert("We couldn't find any projects for the selected class!");
+              }
+            } catch (error) {
+              console.error("We got an error trying to fetch projects:", error);
+            }
+          }
+        });
+
+      // There is an event listener that looks for changes in projectSelect dropdown
+      // An API GET request is sent to retrieve group data
+      // Groups are filtered out from the data sent by the API and used to dynamically populate the 'Select a Group' dropdown 
+      document
+        .getElementById("projectSelect")
+        .addEventListener("change", async function () {
+          const projectSelection = this.value;
+          const studentSelection = document.getElementById("studentSelect");
+          studentSelection.innerHTML =
+            '<option value="">-- Select a Group --</option>'; 
+
+          if (projectSelection) {
+            try {
+              const response = await fetch("/retrieve-projects");
+              const retrievedProjectData = await response.json();
+
+              if (response.ok && retrievedProjectData.length > 0) {
+                const filteredGroupData = retrievedProjectData.filter(
+                  (group) => group.Project_Selected === projectSelection
+                );
+
+                if (filteredGroupData.length > 0) {
+                  filteredGroupData.forEach((group) => {
+                    const option = document.createElement("option");
+                    option.value = group.Group_ID; 
+                    option.textContent = `${
+                      group.GroupName
+                    }: ${group.Students.join(", ")}`; 
+                    studentSelection.appendChild(option);
+                  });
+                } else {
+                  alert("Unfortunately, there were no students/groups found for the selected project.");
+                }
+              } else {
+                alert("Unfortunately, there were no projects found.");
+              }
+            } catch (error) {
+              console.error("Unfortunately, there was an error fetching projects:", error);
+            }
+          }
+        });
+
+      // The event listener listens for clicks on the 'Submit Evaluation' button
+      // Check to ensure that all the form fields are filled out
+      // Constructs an object called evaluationData with values from the form
+      // Sends a API POST request with the evaluationData object
+      // If it is successful, a success alert is displayed and the form fields are reset
+      // Otherwise, there is an error alert shown
+      document
+        .getElementById("submitButton")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+
+          const evaluationUserInput = document.getElementById("evaluationInput");
+          const gradeUserInput = document.getElementById("gradeInput");
+          const studentSelection = document.getElementById("studentSelect");
+          const projectSelection = document.getElementById("projectSelect");
+          const classSelection = document.getElementById("classSelect");
+
+          if (
+            evaluationUserInput.value &&
+            gradeUserInput.value &&
+            studentSelection.value &&
+            projectSelection.value
+          ) {
+
+            const evaluationInputData = {
+              course: classSelection.value, 
+              project: projectSelection.value,
+              grade: gradeUserInput.value,
+              evaluation: evaluationUserInput.value,
+            };
+
+            fetch("/submit-evaluation", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(evaluationInputData),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data); 
+                if (data.message === "The evaluation was submitted successfully!") {
+                  alert("Your Evaluation Was Submitted Successfully!");
+
+                  evaluationUserInput.value = "";
+                  gradeUserInput.value = "";
+                  studentSelection.selectedIndex = 0; 
+                  projectSelection.selectedIndex = 0; 
+                  classSelection.selectedIndex = 0; 
+                } else {
+                  alert("Unfortunately, there was an error submitting your evaluation. Please try again.");
+                }
+              })
+              .catch((error) => {
+                console.error("Unfortunately, there was an error submitting your evaluation:", error);
+                alert("Unfortunately, there was an error submitting your evaluation. Please try again.");
+              });
+          } else {
+            alert("Please make sure to fill out all the fields before submitting!");
+          }
+        });
+    </script>
+  </body>
+</html>

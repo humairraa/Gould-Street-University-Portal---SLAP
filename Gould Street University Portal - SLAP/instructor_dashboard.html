@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLAP Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .top-banner {
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 110px; /* Set a fixed height to avoid dropdown expansion */
+        }
+
+        .logo-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-button {
+            font-size: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .logo-small {
+            font-size: 60px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow:1;
+            margin-top:50px;
+        }
+
+        /* Styles for dropdown */
+        .dropdown {
+            position: absolute; /* Position it absolute */
+            right: 20px; /* Align to the right */
+            padding-right: 10%;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 50%;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .letter {
+            transition: transform 1s ease;
+        }
+
+        /* Constant glow and rotate effect for the letter S */
+        .rotate-glow {
+            animation: rotateEffect 1s ease-in-out forwards;
+            color: #007bff;
+            text-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+        }
+
+        @keyframes rotateEffect {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .main-container {
+            background-color: #fff;
+            padding: 2rem;
+            padding-top: 0%;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1600px;
+            width: 100%;
+            text-align:center;
+            margin-top:20px;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 2.8rem;
+            color: #333;
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 2.1rem;
+            color: #333;
+            font-weight: 400;
+        }
+
+        /* Button Group */
+        .button-group {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        #courseContainer {
+            display: flex; 
+            flex-wrap: wrap;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 1rem;
+            width: 100%;
+            border-radius: 10px;
+            padding: 2%;
+            padding-top: 0%;
+        }
+
+        #courseButtonsContainer {
+            display: flex; /* Flex container for buttons */
+            flex-wrap: wrap; /* Allow wrapping to new lines if needed */
+            justify-content: center; /* Center buttons */
+            width: 100%; /* Full width */
+        }
+
+        .dash-button {
+            width: 250px;
+            height: 150px;
+            background-color: #ffffff94;
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+        }
+        
+        .dash-button:hover {
+            background-color: #00000049;
+            color: rgb(255, 255, 255);
+        }
+
+        .option-button {
+            width: 250px;
+            height: 150px;
+            background-color: #e3e3f7;
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+        }
+        
+        .option-button:hover {
+            background-color: #f4f4ff;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="top-banner">
+        <div class="logo-container">
+            <button class="logo-button" id="logoButton">
+                <div class="logo-small">
+                    <span class="letter">G</span>
+                    <span class="letter" id="s-letter">S</span>
+                    <span class="letter">U</span>
+                </div>
+            </button>
+        </div>
+
+        <!-- Dropdown for Account button, aligned to the right -->
+        <div class="dropdown">
+            <button class="logout-button" onclick="toggleDropdown()">Account <span style="font-size: 0.8em;">&#9660;</span></button>
+            <div class="dropdown-content" id="dropdownContent" style="display: none;">
+                <a href="#" onclick="window.location.href='task5.html'">Change Password</a>
+                <a href="#" onclick="window.location.href='task2.html'">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <h1 id="welcomeHeader"></h1>
+    <div class="main-container">
+        <div id="courseContainer">
+            <h2>My Courses</h2>
+            <div id="courseButtonsContainer"></div>
+        </div>
+        <h2>Options</h2>
+        <div class="button-group">
+            <button class="option-button" id="viewSlapsButton">View SLAPs</button>
+            <button class="option-button" id="createSLAPButton">Create SLAPs</button>
+            <button class="option-button" id="viewMessageButton">View Messages</button>
+            <button class="option-button" id="sendMessageButton">Send Messages</button>
+            <button class="option-button" id="studentActivityButton">View Student Activity</button>
+        </div>
+    </div>
+
+    <script>
+        // Add a 3-second delay before triggering the glow and rotate effect for the letter 'S'
+        window.onload = function() {
+            const sLetter = document.getElementById('s-letter');
+
+            setTimeout(() => {
+                sLetter.classList.add('rotate-glow');
+            }, 3000); // 3-second delay before the animation starts
+        }
+
+        // Function to toggle the dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById("dropdownContent");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close the dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.logout-button')) {
+                const dropdown = document.getElementById("dropdownContent");
+                if (dropdown && dropdown.style.display === "block") {
+                    dropdown.style.display = "none";
+                }
+            }
+        }
+
+        // Run this when the page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentUser = localStorage.getItem('currentUser'); // Retrieve currentUser
+            const welcomeHeader = document.getElementById('welcomeHeader');
+        
+            if (currentUser) {
+                welcomeHeader.textContent = `Welcome, ${currentUser}`;
+            } else {
+                welcomeHeader.textContent = "Welcome, Instructor";
+            }
+
+            const courseContainer = document.getElementById("courseButtonsContainer");
+            const courses = JSON.parse(localStorage.getItem("courses")) || [];
+        
+            // Filter courses for the current instructor
+            const instructorCourses = courses.filter(course => course.profSlapID === currentUser);
+
+            instructorCourses.forEach(course => {
+                const courseWrapper = document.createElement("div");
+                courseWrapper.style.backgroundColor = course.colour
+                courseWrapper.style.borderRadius = '10px';
+
+                const courseButton = document.createElement("button");
+                courseButton.className = "dash-button";
+
+                const textContainer = document.createElement("div");
+                const courseCode = document.createElement("div");
+                courseCode.textContent = course.courseCode;
+                courseCode.style.fontWeight = 'bold';
+                const courseTitle = document.createElement("div");
+                courseTitle.textContent = course.title;
+
+                textContainer.appendChild(courseCode);
+                textContainer.appendChild(courseTitle);
+                courseButton.appendChild(textContainer);
+                courseWrapper.appendChild(courseButton);
+                courseContainer.appendChild(courseWrapper);
+                document.getElementById("courseContainer").appendChild(courseWrapper);
+            
+                // Set up click event to navigate to the course dashboard
+                courseButton.addEventListener("click", function() {
+                    window.location.href = `course_dashboard.html?courseID=${course.courseID}`;
+                });
+            });
+
+        });
+
+        document.getElementById('logoButton').addEventListener('click', function() {
+            const userType = localStorage.getItem('userType'); 
+            switch (userType) {
+                case "student":
+                    window.location.href = "student_dashboard.html"
+                    break;
+                case "instructor":
+                    window.location.href = "instructor_dashboard.html"
+                    break;
+                case "admin":
+                    window.location.href = "admin_dashboard.html"
+                    break;
+            }
+        });
+
+        document.getElementById('createSLAPButton').addEventListener('click', function() {
+            window.location.href = `task20.html`;
+        });
+        document.getElementById('viewMessageButton').addEventListener('click', function() {
+            window.location.href = 'task3.html';
+        });
+        document.getElementById('sendMessageButton').addEventListener('click', function() {
+            window.location.href = 'task4.html';
+        });
+        document.getElementById('viewSlapsButton').addEventListener('click', function() {
+            window.location.href = 'slaps_view.html';
+        });
+        document.getElementById('studentActivityButton').addEventListener('click', function() {
+            window.location.href = 'task19.html';
+        });
+    </script>
+</body>
+</html>

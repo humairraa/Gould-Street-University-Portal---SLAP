@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLAP-Re-Organize Contacts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Login */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .top-banner {
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 110px; /* Set a fixed height to avoid dropdown expansion */
+        }
+
+        .logo-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-button {
+            font-size: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .logo-small {
+            font-size: 60px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow:1;
+            margin-top:50px;
+        }
+
+        /* Styles for dropdown */
+        .dropdown {
+            position: absolute; /* Position it absolute */
+            right: 20px; /* Align to the right */
+            padding-right: 10%;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 50%;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20vh;
+            background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+
+        .logo {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f3c88;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+        .contact-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .letter {
+            transition: transform 1s ease;
+        }
+
+        /* Constant glow and rotate effect for the letter S */
+        .rotate-glow {
+            animation: rotateEffect 1s ease-in-out forwards;
+            color: #007bff;
+            text-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+        }
+
+        @keyframes rotateEffect {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .main-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.8rem;
+            color: #007bff;
+        }
+        .filter-options {
+            margin: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .filter-options select {
+            padding: 0.8rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 50%;
+        }
+        .button-group {
+            margin-top: 2rem;
+        }
+
+        .button-group button {
+            width: 48%;
+            padding: 0.8rem;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-group button:hover {
+            background-color: #0056b3;
+        }
+        /* Chat Pane */
+        .chat-pane {
+            margin-top: 2rem;
+            width: 100%;
+            background-color: #f1f5f9;
+            border-radius: 10px;
+            padding: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .contact-item {
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #e0e7ff;
+            text-align: left;
+        }
+
+        .contact-item h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1f3c88;
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-item p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+    
+        #slap {
+            width: 100%;           /* Full width of the form */
+            padding: 10px;        /* Padding inside the textarea */
+            box-sizing: border-box; /* Include padding in width */
+            resize: none;         /* Disable resizing */
+            margin-bottom: 1rem;
+        }
+        #title {
+            width: 100%;           /* Full width of the form */
+            padding: 10px;        /* Padding inside the input */
+            box-sizing: border-box; /* Include padding in width */
+            margin-top: 5px;     /* Add some space above the input */
+            margin-bottom: 10px;  /* Add some space below the input */
+            font-size: 20px;
+            font-weight: 500; 
+        }
+        /* Error Message */
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .radio-group {
+            display: flex; /* Flexbox to align items in a row */
+            gap: 1rem;     /* Space between radio buttons */
+            margin-top: 0.5rem;
+            margin-bottom: 1.0rem;
+        }
+    
+        .radio-group div {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-group label {
+            margin-left: 0.5rem; /* Adjust as needed for spacing */
+            padding-left: 0.3rem; /* Optional padding for extra space */
+        }
+
+        /* No Contacts Message */
+        .no-contacts-message {
+            font-size: 1rem;
+            color: #dc3545;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="top-banner">
+        <div class="logo-container">
+            <button class="logo-button" id="logoButton">
+                <div class="logo-small">
+                    <span class="letter">G</span>
+                    <span class="letter" id="s-letter">S</span>
+                    <span class="letter">U</span>
+                </div>
+            </button>
+        </div>
+
+        <!-- Dropdown for Account button, aligned to the right -->
+        <div class="dropdown">
+            <button class="logout-button" onclick="toggleDropdown()">Account <span style="font-size: 0.8em;">&#9660;</span></button>
+            <div class="dropdown-content" id="dropdownContent" style="display: none;">
+                <a href="#" onclick="window.location.href='task5.html'">Change Password</a>
+                <a href="#" onclick="window.location.href='task2.html'">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-container">
+        <h1>Reorganize Contacts</h1>
+        
+        <div class="filter-options">
+            <label for="filterSelect">Select Filter Method:</label>
+            <select id="filterSelect">
+                <option value="alpha">Alphabetical</option>
+                <option value="course">By Course</option>
+                <option value="instructor">By Instructor</option>
+            </select>
+        </div>
+        
+        <div class="button-group">
+            <button onclick="filterContacts()">Filter Contacts</button>
+        </div>
+         
+        <div class="chat-pane" id="chatPane">
+            <!-- Filtered contacts will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        // Add a 3-second delay before triggering the glow and rotate effect for the letter 'S'
+        window.onload = function() {
+            const sLetter = document.getElementById('s-letter');
+
+            setTimeout(() => {
+                sLetter.classList.add('rotate-glow');
+            }, 3000); // 3-second delay before the animation starts
+            displayContacts(contacts); // display contacts without sorting.
+        }
+        
+        // Function to toggle the dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById("dropdownContent");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close the dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.logout-button')) {
+                const dropdown = document.getElementById("dropdownContent");
+                if (dropdown && dropdown.style.display === "block") {
+                    dropdown.style.display = "none";
+                }
+            }
+        }
+
+        // Mock contact data (in a real application, data would come from a database)
+        const contacts = [
+            { name: "John McMiller", course: "Mathematics" },
+            { name: "Alice Johnson",  instructor: "Prof. Davis" },
+            { name: "Bob Brown", course: "Mathematics", instructor: "Prof. Smith" },
+            { name: "Claire Green", course: "Physics", instructor: "Prof. Nielson" },
+            { name: "David White", course: "Chemistry", instructor: "Prof. Williams" },
+            { name: "John McMiller", course: "Mathematics", instructor: "Prof. David" },
+            { name: "Alex Jones", course: "Computer Science", instructor: "Prof. Alison" },
+            { name: "Mary white", course: "English", instructor: "Prof. Drake" },
+            { name: "Sam Winter", course: "communications", instructor: "Prof. Jhonson" },
+            { name: "Bob Brown", course: "Computer Science", instructor: "Prof. Davis" },
+            { name: "Claire Green", course: "Architecture", instructor: "Prof. Niel" },
+            { name: "David Benard", course: "Chemistry", instructor: "Prof. Williams" },
+            { name: "Jenna Miller", course: "Mathematics", instructor: "Prof. David" },
+            { name: "Jaime McAllister", course: "Computer Science", instructor: "Prof. Alison" },
+            { name: "Tony Max", course: "English", instructor: "Prof. Drake" },
+            { name: "Liam David", course: "communications", instructor: "Prof. Jhonson" },
+            { name: "John McMiller", course: "Mathematics" , instructor: "prof. Martha"},
+            { name: "Alice Johnson", course: "Economics" ,  instructor: "Prof. Jenna" },
+            { name: "Jennifer Blake", course: "Accounting", instructor: "Prof. Smith" },
+            { name: "Eric Diaz", course: "Arts", instructor: "Prof. Jackson" },
+            { name: "David White", course: "Chemistry", instructor: "Prof. Williams" },
+            { name: "John McMiller", course: "Mathematics", instructor: "Prof. David" },
+            { name: "Mary Jones", course: "Computer Science", instructor: "Prof. Alison" },
+            { name: "David Warner", course: "English", instructor: "Prof. Drake" },
+            { name: "Alice Brown", course: "communications", instructor: "Prof. Jhonson" },
+            { name: "Arya Niel", course: "Computer Science", instructor: "Prof. Davis" },
+            { name: "Vir Param", course: "Architecture", instructor: "Prof. Niel" },
+            { name: "Anna Alexander", course: "Chemistry", instructor: "Prof. Williams" },
+            { name: "Brian Arry", course: "Mathematics", instructor: "Prof. David" },
+            { name: "Jaime McAllister", course: "Computer Science", instructor: "Prof. Alison" },
+            { name: "Vincent James", course: "English", instructor: "Prof. Drake" },
+            { name: "Larry morgan", course: "communications", instructor: "Prof. Jhonson" },
+        ];
+
+        // Display contacts in the chat pane
+        function displayContacts(sortedContacts) {
+            const chatPane = document.getElementById('chatPane');
+            chatPane.innerHTML = ''; // Clear previous contacts
+
+            if (sortedContacts.length === 0) {
+                const noContactsMessage = document.createElement('div');
+                noContactsMessage.classList.add('no-contacts-message');
+                noContactsMessage.textContent = "No contacts available for the selected filter.";
+                chatPane.appendChild(noContactsMessage);
+                return;
+            }
+            sortedContacts.forEach(contact => {
+                const contactItem = document.createElement('div');
+                contactItem.classList.add('contact-item');
+                
+                const contactName = document.createElement('h2');
+                contactName.textContent = contact.name;
+                
+                const contactCourse = document.createElement('p');
+                contactCourse.textContent = `Course: ${contact.course}`;
+                
+                const contactInstructor = document.createElement('p');
+                contactInstructor.textContent = `Instructor: ${contact.instructor}`;
+
+                contactItem.appendChild(contactName);
+                contactItem.appendChild(contactCourse);
+                contactItem.appendChild(contactInstructor);
+                chatPane.appendChild(contactItem);
+            });
+        }
+
+        function filterContacts() {
+            const filterMethod = document.getElementById('filterSelect').value;
+            let sortedContacts = [...contacts]; // Clone the contacts array
+
+            switch (filterMethod) {
+                case 'alpha':
+                    sortedContacts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'course':
+                    sortedContacts = sortedContacts.filter(contact => contact.course); // Filter out contacts without courses
+                    sortedContacts.sort((a, b) => a.course.localeCompare(b.course));
+                    break;
+                case 'instructor':
+                    sortedContacts = sortedContacts.filter(contact => contact.instructor); // Filter out contacts without instructors
+                    sortedContacts.sort((a, b) => a.instructor.localeCompare(b.instructor));
+                    break;
+                default:
+                    alert("Invalid filter method selected.");
+                    return;
+            }
+
+            displayContacts(sortedContacts);
+        }
+
+        document.getElementById('logoButton').addEventListener('click', function() {
+            const userType = localStorage.getItem('userType'); 
+            console.log(userType);
+            switch (userType) {
+                case "student":
+                    window.location.href = "student_dashboard.html"
+                    break;
+                case "instructor":
+                    window.location.href = "instructor_dashboard.html"
+                    break;
+                case "admin":
+                    window.location.href = "admin_dashboard.html"
+                    break;
+            }
+        });
+        // Helper function to get query parameter by name
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+        
+    </script>
+</body>
+</html>
