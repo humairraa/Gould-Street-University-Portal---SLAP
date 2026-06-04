@@ -53,6 +53,9 @@ It simulates real-world academic systems used in universities and demonstrates p
 
 ---
 
+## Future Improvements
+- Enhanced search functionality
+- 
 ## ⚙️ Installation
 
 ```bash
